@@ -1,0 +1,224 @@
+.timesheet-modal-container {
+  // Buttons
+  .save-btn,
+  .cancel-btn {
+    border-radius: 8px;
+  }
+
+  .cancel-btn {
+    background-color: #ffffff;
+    &:hover {
+      background-color: #e8e8e8;
+    }
+  }
+  .save-btn {
+    background-color: #007bff;
+    &:hover {
+      background-color: #2884ef;
+    }
+  }
+
+  .task-dropdown-container {
+    ::v-deep .dropdown-toggle {
+      background-color: #ffffff !important;
+
+      .label-dropdown {
+        svg {
+          transition: transform 0.3s ease;
+        }
+      }
+    }
+
+    // Rotate chevron when dropdown is open
+    ::v-deep .dropdown.show .dropdown-toggle {
+      .label-dropdown {
+        svg {
+          transform: rotate(-180deg);
+        }
+      }
+    }
+  }
+
+  .task-dropdown-container ::v-deep .dropdown-menu {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-height: 300px;
+    overflow-y: hidden;
+  }
+
+  ::v-deep .dropdown-toggle {
+    background-color: #ffffff !important;
+  }
+
+  .task-dropdown-menu {
+    min-width: 300px;
+    padding: 5px 12px;
+  }
+
+  .search-input-tasks {
+    margin-bottom: 8px;
+  }
+
+  .search-input-tasks input {
+    border-radius: 4px;
+    padding: 8px 12px;
+    width: 100%;
+    border: 1px solid #e0e0e0;
+  }
+
+  .task-list {
+    max-height: 240px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      box-shadow: inset 2px 0 0 transparent, inset -2px 0 0 transparent;
+      border: 0;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #d0d5dd;
+      border: 0px solid transparent;
+      border-radius: 8px;
+      background-clip: padding-box;
+    }
+  }
+
+  .task-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    background-color: transparent !important;
+    border: none !important;
+    text-align: left !important;
+    color: inherit !important;
+    width: 100%;
+  }
+
+  .task-item-disabled {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    cursor: not-allowed;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    background-color: transparent !important;
+    border: none !important;
+    text-align: left !important;
+    color: inherit !important;
+    width: 100%;
+    opacity: 0.5;
+  }
+
+  .task-name {
+    margin-left: 8px;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    ::v-deep .custom-tooltip {
+      max-width: 300px !important;
+      word-wrap: break-word !important;
+      white-space: normal !important;
+      text-align: left !important;
+      overflow-wrap: break-word !important;
+      hyphens: auto !important;
+      border-radius: 4px !important;
+      padding: 8px 10px !important;
+
+      .tooltip-content {
+        font-size: 14px;
+        line-height: 1.5;
+        white-space: normal;
+        word-break: break-word;
+      }
+    }
+  }
+
+  /* Custom checkbox styling */
+  .custom-checkbox {
+    position: relative;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .custom-checkbox input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.2;
+    }
+  }
+
+  .custom-checkbox label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 18px;
+    height: 18px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 0;
+  }
+
+  .custom-checkbox input[type="checkbox"]:checked + label {
+    background: #f4f9ff;
+    border: 1px solid #2884ef;
+    border-radius: 4px;
+  }
+
+  .custom-checkbox input[type="checkbox"]:checked + label:after {
+    content: "";
+    position: absolute;
+    top: 1.7px;
+    left: 5.2px;
+    width: 5px;
+    height: 10px;
+    border: solid rgba(40, 132, 239, 1);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .label-dropdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 2px 0;
+    border-radius: 4px;
+    background-color: white;
+  }
+
+  .no-tasks-message {
+    padding: 10px;
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+  }
+}

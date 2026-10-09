@@ -1,0 +1,164 @@
+.archapp-table-project {
+  white-space: nowrap;
+  margin-bottom: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0;
+  visibility: hidden;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  & > thead tr th {
+    font-weight: 500;
+  }
+
+  & > thead tr th,
+  & > tbody tr td {
+    vertical-align: middle;
+  }
+
+  & > thead tr th:first-child,
+  & > tbody tr td:first-child {
+    padding-left: 2.25rem;
+  }
+
+  & > thead tr th:last-child,
+  & > tbody tr td:last-child {
+    padding-right: 2.25rem;
+  }
+
+  & > thead tr th:not(:first-child, :nth-child(2)),
+  & > tbody tr td:not(:first-child, :nth-child(2)) {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.archapp-table-striped {
+  > tbody > tr:nth-of-type(odd) {
+    > td,
+    > th {
+      background-color: #f1f4f7;
+    }
+  }
+}
+
+.archapp-table {
+  white-space: nowrap;
+  margin-bottom: 0;
+  height: calc(100vh - 335px);
+  min-height: 100px;
+
+  & thead {
+    position: sticky;
+    top: 0;
+    z-index: 9;
+    background-color: white;
+  }
+
+  & thead th {
+    font-size: 12px;
+    color: #475467;
+  }
+
+  & thead th:first-child,
+  & tbody td:first-child {
+    padding-left: 2.25rem;
+  }
+
+  & thead th:last-child,
+  & tbody td:last-child {
+    padding-right: 2.25rem;
+  }
+
+  & tbody tr:nth-child(odd) {
+    background-color: #f9fafb;
+  }
+
+  & tbody tr:hover {
+    cursor: pointer;
+    background-color: #e4e6ef !important;
+  }
+
+  & tbody {
+    .row-bold {
+      font-weight: 500;
+      color: #101828;
+    }
+
+    & td {
+      font-size: 14px !important;
+      color: #475467;
+      align-content: center;
+    }
+  }
+
+  p {
+    margin: 0;
+  }
+
+  &__col-assignees {
+    .b-avatar {
+      border: 1.5px solid #fff;
+    }
+
+    .remain-assignees {
+      color: #2884ef;
+      background-color: #f4f9ff;
+    }
+  }
+
+  &__col-createdby {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__col-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      padding: 0;
+
+      i {
+        color: #475467;
+      }
+    }
+
+    button:hover {
+      i {
+        color: #3699ff;
+      }
+    }
+  }
+
+  &__pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    border-top: 1px solid #ebedf3;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-width: 1px 0px 1px 0px;
+    border-style: solid;
+    border-color: rgba(228, 231, 236, 1);
+    background-color: white;
+  }
+
+  &::-webkit-scrollbar {
+    background-color: #f5f5f5;
+    width: 7px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #d0d5dd;
+    border-radius: 8px;
+  }
+}

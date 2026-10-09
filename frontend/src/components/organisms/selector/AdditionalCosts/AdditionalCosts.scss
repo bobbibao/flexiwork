@@ -1,0 +1,43 @@
+.additional-cost {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .choice-item {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      border: 1px solid #e4e7ec;
+      padding: 12px;
+      border-radius: 8px;
+
+      input[type="checkbox"] {
+        align-self: baseline;
+        margin-top: 3px;
+      }
+
+      .desc-message {
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 20px;
+        color: #344054;
+      }
+    }
+  }
+
+  .choice-total {
+    font-size: 16px;
+    line-height: 24px;
+    color: #344054;
+  }
+}
+
+.additional-button {
+  padding-left: 24px;
+  padding-right: 24px;
+}

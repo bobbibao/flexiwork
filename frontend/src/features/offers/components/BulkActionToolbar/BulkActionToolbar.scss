@@ -1,0 +1,66 @@
+.tool-bar-offer {
+  transition: all 0.5s ease;
+  user-select: none;
+  margin: 0;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: black;
+  color: white;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 8px;
+  width: 600px;
+
+  &.show {
+    bottom: 40px;
+  }
+}
+
+.amount-selected {
+  background: white;
+  color: black;
+  padding: 4px 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
+.btn-edit,
+.btn-delete {
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.btn-edit {
+  background: white;
+  color: black;
+
+  &:hover {
+    background: rgb(230, 229, 229);
+  }
+}
+
+.btn-delete {
+  background: rgb(255, 226, 226);
+  color: red;
+
+  &:hover {
+    background: rgb(248, 206, 206);
+  }
+}
+
+.btn-close {
+  color: #ccc;
+
+  &:hover {
+    color: #aaaaaa;
+  }
+}
+.icon-text-gap {
+  display: flex;
+  align-items: center;
+}
+
+.icon-text-gap svg {
+  margin-right: 8px;
+}

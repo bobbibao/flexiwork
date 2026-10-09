@@ -1,0 +1,36 @@
+.action {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.action-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#perPageSelect {
+  width: 25%;
+}
+
+#filterInput {
+  width: 35%;
+}
+.customer-selector {
+  .icon-container {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background-color: #eef6ff;
+    border: 8px solid #f4f9ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+  }
+}
+
+:deep(.modal-content) {
+  border-radius: 12px;
+}

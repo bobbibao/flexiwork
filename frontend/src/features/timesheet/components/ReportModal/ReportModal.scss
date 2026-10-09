@@ -1,0 +1,40 @@
+.unlock-report-header {
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+// Modal customization
+::v-deep .modal-content {
+  border-radius: 12px;
+}
+
+// Form elements
+::v-deep .form-control,
+::v-deep .custom-select {
+  border-radius: 8px;
+}
+
+// Buttons
+.save-btn,
+.cancel-btn {
+  border-radius: 8px;
+}
+
+.cancel-btn {
+  background-color: #ffffff;
+  &:hover {
+    background-color: #e8e8e8;
+  }
+}
+.save-btn {
+  background-color: #007bff;
+  &:hover {
+    background-color: #2884ef;
+  }
+}
+
+// Checkbox
+::v-deep .custom-checkbox .custom-control-label::before {
+  border-radius: 4px;
+}

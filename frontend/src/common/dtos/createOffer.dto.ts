@@ -1,0 +1,42 @@
+import { AdditionalOption } from "@/components/organisms/selector/AdditionalCosts/type";
+import { Customer } from "../models/customer.model";
+
+export interface CreateOfferDto {
+  name: string;
+  customer: Customer;
+  location: string;
+  date: string;
+  title: string;
+  category: string;
+  additional: string;
+  additional_break: boolean;
+  additional_cost: AdditionalOption[];
+  additional_desc: string;
+  begin: string;
+  begin_break: boolean;
+  begin_desc: string;
+  cost_estimate: { label: string; value: number; order: string; id?: number | string }[];
+  cost_generate: { time: { label: string; value: number }; u_factor: { label: string; value: number } };
+  currency: string;
+  discount_percent: number;
+  end: string;
+  end_desc: string;
+  estimate_cost: string;
+  event: string;
+  event_break: boolean;
+  events: { label: string; value: string }[];
+  internal_desc: { label: string; is_active: boolean }[];
+  internal_desc_custom: string;
+  km_dropdown: { label: string; value: number };
+  offer: string;
+  offer_break: boolean;
+  offer_desc: string;
+  offer_quote_break: boolean;
+  parameter: string;
+  parameter_break: boolean;
+  parameter_desc: string;
+  performance: string;
+  performance_break: boolean;
+  performance_desc: string;
+  quote_items: any[];
+}

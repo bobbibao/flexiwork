@@ -1,0 +1,27 @@
+<!-- eslint-disable max-len -->
+<script setup lang="ts">
+import { defineProps } from "vue";
+
+const props = defineProps({
+  width: {
+    type: String,
+    default: "16"
+  },
+  height: {
+    type: String,
+    default: "18"
+  }
+});
+</script>
+
+<template>
+  <svg :width="width" :height="height" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M14.6673 16.5V14.8333C14.6673 13.9493 14.3161 13.1014 13.691 12.4763C13.0659 11.8512 12.218 11.5 11.334 11.5H4.66732C3.78326 11.5 2.93542 11.8512 2.31029 12.4763C1.68517 13.1014 1.33398 13.9493 1.33398 14.8333V16.5M11.334 4.83333C11.334 6.67428 9.8416 8.16667 8.00065 8.16667C6.1597 8.16667 4.66732 6.67428 4.66732 4.83333C4.66732 2.99238 6.1597 1.5 8.00065 1.5C9.8416 1.5 11.334 2.99238 11.334 4.83333Z"
+      stroke="#667085"
+      stroke-width="1.66667"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+</template>

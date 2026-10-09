@@ -1,0 +1,42 @@
+.action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.action-start {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#perPageSelect {
+  width: 25%;
+}
+.folder-select {
+  height: 44px;
+}
+#filterInput {
+  width: 35%;
+  margin-left: 8px;
+}
+
+// ...existing code...
+
+.customer-selector {
+  .icon-container {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background-color: #eef6ff;
+    border: 8px solid #f4f9ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+  }
+}
+
+:deep(.modal-content) {
+  border-radius: 12px;
+}

@@ -1,0 +1,23 @@
+.internal-desc {
+  $margin-gap: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  .internal-desc-label {
+    font-weight: 500;
+    font-size: 14px;
+    color: #344054;
+    padding: 0;
+    margin: 0;
+    margin-left: 8px;
+  }
+  .disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}

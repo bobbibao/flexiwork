@@ -1,0 +1,49 @@
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+/.pnp
+.pnp.js
+
+# yarn
+.yarn
+
+# Log files
+combine.log
+error.log
+
+# development
+src/uploads/*
+uploads/*
+/src/azure_files
+
+# testing
+/coverage
+
+# production
+/build
+/dist
+
+# libreoffice
+libreoffice_temp
+
+# misc
+.DS_Store
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+launch.json
+package-lock.json
+
+# Output error command
+output.txt
+
+# Env files
+*.env
+!.example.env
+
+# Logs folder
+logs
+scripts

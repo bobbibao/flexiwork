@@ -1,0 +1,50 @@
+.title-container {
+  .title-wrapper {
+    cursor: pointer;
+  }
+
+  .edit-button {
+    display: inline-block;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    margin-top: -1px;
+  }
+
+  .edit-button:hover {
+    opacity: 1;
+  }
+
+  .edit-input {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    min-width: 200px;
+  }
+
+  .edit-input:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .submit-button {
+    position: static; // Remove absolute positioning
+    border: none;
+    background: transparent;
+    color: #28a745;
+    padding: 4px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    // Remove right, top and transform properties
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

@@ -1,0 +1,35 @@
+.total-sum {
+  width: 100%;
+  .total-cards {
+    width: 100%;
+    height: 122px;
+    gap: 12px;
+  }
+  .card-body {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    height: 100%;
+  }
+  .card-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    height: 100%;
+    gap: 12px;
+  }
+  .card-title {
+    margin-bottom: unset;
+  }
+  .total-value {
+    font-weight: 600;
+    font-size: 30px;
+    text-align: start;
+    user-select: none;
+  }
+  .card {
+    border-radius: 12px;
+  }
+}

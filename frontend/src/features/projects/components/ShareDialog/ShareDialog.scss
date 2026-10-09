@@ -1,0 +1,20 @@
+.action {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.save-btn {
+  width: 100%;
+  max-width: 200px;
+}
+
+.menu-icon {
+  margin-right: 0.5rem;
+}
+
+.connected-company-name {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+}

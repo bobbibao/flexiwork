@@ -1,0 +1,52 @@
+.b-toaster.archapp-toast-top-center {
+  top: 2rem;
+
+  .toast {
+    border-radius: 10px;
+
+    &.toast-success {
+      background: #D1F7E3;
+      border: 1px solid #D1F7E3;
+  
+      color: #2D8A5C;
+    }
+
+    &.toast-danger {
+      background: #FCE1E6;
+      border: 1px solid #FCE1E6;
+  
+      color: #961431;
+    }
+  }
+
+  .toast-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 0.5rem;
+    
+    .toast-body {
+      padding: 8px 0;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-grow: 1;
+
+      svg {
+        min-width: 25px;
+        min-height: 25px;
+      }
+
+      span {
+        flex-grow: 1;
+        font-size: 14px;
+      }
+    }
+
+    .btn-close {
+      user-select: none;
+      font-size: 14px;
+      color: #aaa;
+    }
+  }
+}

@@ -1,0 +1,48 @@
+@import "./layout.scss";
+@import "./tables.scss";
+@import "./toast.scss";
+@import "./utilities/index.scss";
+
+html {
+  overflow-y: auto !important;
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #fff;
+  border: 1px solid #dadada;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 1.5rem;
+  cursor: pointer;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.archapp-wrapper {
+  height: calc(100vh - 55px - 4rem);
+  // min-width: 765px;
+}
+
+.tooltip-inner {
+  p {
+    margin: 0;
+  }
+}
+
+@media (min-width: 992px) {
+  .archapp-wrapper {
+    height: calc(100vh - 65px - 52px);
+  }
+}

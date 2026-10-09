@@ -1,0 +1,260 @@
+.btn-container {
+  .btn-custom {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    border-radius: 8px;
+    border: 1px solid;
+    box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+    font-weight: 500;
+    text-transform: capitalize;
+    &.size-icon {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  svg {
+    height: 16px;
+    width: auto;
+  }
+
+  .size-sm,
+  .size-sm.only-icon {
+    padding: 8px 14px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .size-sm.only-icon {
+    padding: 6px;
+  }
+
+  .size-md {
+    padding: 10px 16px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .size-lg {
+    padding: 10px 18px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .size-xl {
+    padding: 12px 20px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .size-2xl {
+    padding: 16px 28px;
+    font-size: 18px;
+    line-height: 28px;
+
+    svg {
+      height: 20px;
+      width: auto;
+    }
+  }
+
+  .variant-primary {
+    color: #fff;
+    background-color: #2884ef;
+    border-color: #2884ef;
+
+    svg {
+      path {
+        stroke: #fff !important;
+      }
+    }
+  }
+
+  .variant-primary:hover {
+    background-color: #006bff;
+    border-color: #006bff;
+  }
+
+  .variant-primary:focus,
+  .variant-secondary:focus {
+    box-shadow: 0px 0px 0px 4px rgba(238, 246, 255, 1);
+  }
+
+  .variant-primary:disabled {
+    cursor: not-allowed;
+    background-color: #a3c2ff;
+    border-color: #a3c2ff;
+  }
+
+  .variant-secondary {
+    color: #006bff;
+    background-color: #f4f9ff;
+    border-color: #f4f9ff;
+
+    svg {
+      path {
+        stroke: #006bff !important;
+      }
+    }
+  }
+
+  .variant-secondary:hover {
+    background-color: #eef6ff;
+    border-color: #eef6ff;
+  }
+
+  .variant-secondary:disabled {
+    cursor: not-allowed;
+    background-color: #fafcff;
+    border-color: #fafcff;
+    color: #a3c2ff;
+
+    svg {
+      path {
+        stroke: #a3c2ff !important;
+      }
+    }
+  }
+
+  .variant-secondary-gray {
+    color: #344054;
+    background-color: #ffffff;
+    border-color: #e4e7ec;
+
+    svg {
+      path {
+        stroke: #344054 !important;
+      }
+    }
+  }
+
+  .variant-secondary-gray:hover {
+    background-color: #f9fafb;
+    color: #1d2939;
+    svg {
+      path {
+        stroke: #1d2939 !important;
+      }
+    }
+  }
+
+  .variant-secondary-gray:focus {
+    box-shadow: 0px 0px 0px 4px rgba(242, 244, 247, 1);
+  }
+
+  .variant-secondary-gray:disabled {
+    cursor: not-allowed;
+    background-color: #ffffff !important;
+    border-color: #e4e7ec;
+    color: #d0d5dd;
+
+    svg {
+      path {
+        stroke: #d0d5dd !important;
+      }
+    }
+  }
+
+  .variant-tertiary-color,
+  .variant-tertiary-color:focus,
+  .variant-link-color,
+  .variant-link-color:focus {
+    color: #006bff;
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+    box-shadow: none;
+
+    svg {
+      path {
+        stroke: #006bff !important;
+      }
+    }
+  }
+
+  .variant-tertiary-color:hover {
+    background-color: #f4f9ff;
+    color: #006bff;
+
+    svg {
+      path {
+        stroke: #006bff !important;
+      }
+    }
+  }
+
+  .variant-tertiary-color:disabled,
+  .variant-link-color:disabled,
+  .variant-tertiary-gray:disabled,
+  .variant-link-gray:disabled {
+    cursor: not-allowed;
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+    box-shadow: none;
+    color: #d0d5dd !important;
+
+    svg {
+      path {
+        stroke: #d0d5dd !important;
+      }
+    }
+  }
+
+  .variant-tertiary-gray,
+  .variant-tertiary-gray:focus,
+  .variant-link-gray,
+  .variant-link-gray:focus {
+    color: #475467;
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+    box-shadow: none;
+
+    svg {
+      path {
+        stroke: #475467;
+      }
+    }
+  }
+
+  .variant-tertiary-gray:hover {
+    color: #344054;
+    background-color: #f9fafb;
+    svg {
+      path {
+        stroke: #344054 !important;
+      }
+    }
+  }
+
+  .variant-link-gray:hover {
+    color: #344054;
+    svg {
+      path {
+        stroke: #344054 !important;
+      }
+    }
+  }
+
+  .variant-link-gray.only-icon:hover {
+    svg {
+      path {
+        stroke: #006bff !important;
+      }
+    }
+  }
+
+  .variant-link-color:hover {
+    color: #0053d0;
+    svg {
+      path {
+        stroke: #0053d0 !important;
+      }
+    }
+  }
+}

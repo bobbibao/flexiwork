@@ -1,0 +1,10 @@
+# Ignore artifacts:
+dist
+build
+coverage
+
+# README
+README.md
+
+# Mail template files (HTML)
+**/*.html

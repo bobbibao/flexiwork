@@ -1,0 +1,8 @@
+**/dist
+**/node_modules
+**/.vscode
+**/.yarn
+**/uploads
+logs
+.dockerignore
+Dockerfile*

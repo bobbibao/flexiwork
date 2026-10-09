@@ -1,0 +1,39 @@
+.btn-filter-tasks {
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  gap: 8px;
+
+  .select-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  @media (min-width: 576px) {
+    align-items: flex-end;
+
+    .select-group {
+      align-items: flex-end;
+
+      & > .c-select-input:first-child .c-dropdown-container .c-dropdown-items {
+        left: auto;
+        right: 0;
+      }
+    }
+  }
+
+  @media (min-width: 700px) {
+    .select-group {
+      flex-direction: row;
+
+      & > .c-select-input:first-child .c-dropdown-container .c-dropdown-items {
+        left: 0;
+        right: auto;
+      }
+    }
+  }
+
+  @media (min-width: 1070px) {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}

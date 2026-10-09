@@ -1,0 +1,34 @@
+const { resolve } = require('path');
+const { existsSync, mkdirSync } = require('fs');
+const appConfig = require('./package.json');
+
+const databasePath =
+  ['staging', 'production'].includes(process.env.NODE_ENV)
+    ? resolve(process.cwd(), 'dist', 'database')
+    : resolve(process.cwd(), 'src', 'database');
+const configPath = resolve(databasePath, 'config', 'database.config.js');
+const modelsPath = resolve(databasePath, 'models');
+const seedersPath = resolve(databasePath, 'seeders');
+
+// Read package.json to get the current version of the app, then create a current version subfolder for migrations
+const migrationsPath = resolve(databasePath, 'migrations', `v${appConfig.version}`);
+
+// Create all necessary folders for migration and seed
+if (!existsSync(modelsPath)) {
+  mkdirSync(modelsPath, { recursive: true });
+}
+
+if (!existsSync(seedersPath)) {
+  mkdirSync(seedersPath, { recursive: true });
+}
+
+if (!existsSync(migrationsPath)) {
+  mkdirSync(migrationsPath, { recursive: true });
+}
+
+module.exports = {
+  config: configPath,
+  'models-path': modelsPath,
+  'seeders-path': seedersPath,
+  'migrations-path': migrationsPath,
+};
