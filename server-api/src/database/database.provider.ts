@@ -58,6 +58,7 @@ import {
 } from './models';
 import CompanyGroup from './models/company-groups.model';
 import CompanyTemplate from './models/company-templates.model';
+import { SN_MODELS } from './sn-models';
 
 export const databaseProviders = [
   {
@@ -120,6 +121,7 @@ export const databaseProviders = [
         InvoiceLabel,
         InvoiceProduct,
         AuditLog,
+        ...SN_MODELS,
       ];
       //const seedInProdModels = [Config];
 

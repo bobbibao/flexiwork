@@ -18,6 +18,15 @@ export enum AuditModuleEnum {
   SETTING = 'setting',
   REPORT = 'report',
   USER = 'user',
+  /** Shift Network */
+  SN_AUTH = 'sn_auth',
+  SHIFT = 'shift',
+  WALLET = 'wallet',
+  WORKER_PROFILE = 'worker_profile',
+  EMPLOYER_PROFILE = 'employer_profile',
+  RATING = 'rating',
+  NOTIFICATION = 'notification',
+  OPS = 'ops',
 }
 
 export enum AuditActionEnum {

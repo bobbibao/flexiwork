@@ -2,7 +2,7 @@ import { HealthModule } from './modules/health/health.module';
 import { Module, MiddlewareConsumer, RequestMethod, Logger } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConditionalModule, ConfigModule } from '@nestjs/config';
 import configuration from './shared/utils/configuration';
 import { CorsMiddleware } from './shared/middlewares/cors.middleware';
 import { CacheControlMiddleware } from './shared/middlewares/cache-control.middleware';
@@ -34,6 +34,7 @@ import { TasksModule } from './modules/tasks/tasks.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CronService } from './shared/services/cron.service';
 import { JwtService } from '@nestjs/jwt';
+import { ShiftNetworkModule } from './modules/shift-network/shift-network.module';
 
 const APP_MODULES = [
   DashboardModule,
@@ -72,6 +73,8 @@ const ENV_FOLDER_PATH = process.env.ENV_PATH ? process.env.ENV_PATH : `${process
     }),
     ScheduleModule.forRoot(),
     ...APP_MODULES,
+    // Shift Network (docs/PLAN.md P1.9): loaded only when FEATURE_SHIFT_NETWORK=true
+    ConditionalModule.registerWhen(ShiftNetworkModule, (env: NodeJS.ProcessEnv) => env.FEATURE_SHIFT_NETWORK === 'true'),
   ],
   controllers: [AppController],
   providers: [
