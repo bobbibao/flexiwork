@@ -83,7 +83,7 @@ export class OutboxRelayService implements OnModuleDestroy {
         true,
       );
       return rows.length;
-    });
+    }, null, true);
     for (const g of dispatchAfterCommit) await this.broker.publish(g.topic, g.rows.map(toMessage));
     return count;
   }

@@ -7,8 +7,9 @@ import { Sequelize } from 'sequelize-typescript';
 export class UnitOfWork {
   constructor(@Inject('SEQUELIZE') readonly sequelize: Sequelize) {}
 
-  run<T>(fn: (t: Transaction) => Promise<T>, existing?: Transaction | null): Promise<T> {
+  run<T>(fn: (t: Transaction) => Promise<T>, existing?: Transaction | null, quiet = false): Promise<T> {
     if (existing) return fn(existing);
+    if (quiet) return this.sequelize.transaction({ logging: false } as any, (t) => fn(t));
     return this.sequelize.transaction((t) => fn(t));
   }
 
