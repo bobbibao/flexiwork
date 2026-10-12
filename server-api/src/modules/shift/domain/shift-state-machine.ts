@@ -55,7 +55,7 @@ export const SHIFT_TRANSITIONS: Record<ShiftCommandName, Transition> = {
   Rematch: { from: [S.NO_SHOW], to: [S.POSTED], actors: ['system', 'ops'] },
   CheckOut: { from: [S.CHECKED_IN], to: [S.CHECKED_OUT], actors: ['worker'] },
   AutoCheckOut: { from: [S.CHECKED_IN], to: [S.CHECKED_OUT], actors: ['system'] },
-  ConfirmCompletion: { from: [S.CHECKED_OUT], to: [S.COMPLETED], actors: ['employer'] },
+  ConfirmCompletion: { from: [S.CHECKED_OUT], to: [S.COMPLETED], actors: ['employer', 'ops'] },
   AutoConfirmCompletion: { from: [S.CHECKED_OUT], to: [S.COMPLETED], actors: ['system'] },
   DisputeCompletion: { from: [S.CHECKED_OUT], to: [S.DISPUTED], actors: ['employer'] },
   ResolveDispute: { from: [S.DISPUTED], to: [S.COMPLETED, S.CANCELLED], actors: ['ops'] },

@@ -301,8 +301,8 @@ export class Shift extends AggregateRoot {
     this.raise(E.WORKER_CHECKED_OUT, payload, now);
   }
 
-  confirmCompletion(approvedMinutes: number | null, auto: boolean, policy: CompletionPolicy, now: Date): void {
-    this.guard(auto ? 'AutoConfirmCompletion' : 'ConfirmCompletion', auto ? 'system' : 'employer');
+  confirmCompletion(approvedMinutes: number | null, auto: boolean, policy: CompletionPolicy, now: Date, actor: ActorKind = 'employer'): void {
+    this.guard(auto ? 'AutoConfirmCompletion' : 'ConfirmCompletion', auto ? 'system' : actor);
     const approved = approvedMinutes ?? policy.defaultApprovedMinutes(this.state.workedMinutes ?? 0, this.state.scheduledMinutes);
     policy.validateApprovedMinutes(approved, this.state.scheduledMinutes);
     this.raiseCompleted(approved, auto, policy, now);

@@ -266,7 +266,7 @@ export class ConfirmCompletionHandler extends ShiftHandlerBase implements IComma
     super(repo);
   }
   execute(cmd: C.ConfirmCompletionCommand) {
-    return this.mutate(cmd.shiftId, cmd.access, cmd.ctx, (s, now) => s.confirmCompletion(cmd.approvedMinutes, false, this.policies.completion(), now));
+    return this.mutate(cmd.shiftId, cmd.access, cmd.ctx, (s, now) => s.confirmCompletion(cmd.approvedMinutes, false, this.policies.completion(), now, cmd.access.kind));
   }
 }
 
