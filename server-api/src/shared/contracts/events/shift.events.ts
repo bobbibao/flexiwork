@@ -26,7 +26,9 @@ export type DispatchMode = 'sequential' | 'broadcast' | 'direct';
 export interface ShiftPostedPayload {
   job_ref: string;
   company_id: number;
+  company_name: string | null;
   work_location_id: string;
+  location_name: string | null;
   title: string;
   description: string | null;
   skill_code: string;
@@ -36,6 +38,7 @@ export interface ShiftPostedPayload {
   estimated_gross_vnd: number;
   platform_fee_vnd: number;
   escrow_amount_vnd: number;
+  scheduled_minutes: number;
   dispatch_mode: 'sequential' | 'broadcast';
   lat: number;
   lng: number;
@@ -54,6 +57,24 @@ export interface ShiftOfferedPayload {
 
 export interface ShiftWorkerPayload {
   worker_id: number;
+}
+
+export interface ShiftOfferDeclinedPayload {
+  worker_id: number;
+  remaining_offers: number[];
+}
+
+export interface ShiftOfferExpiredPayload {
+  worker_ids: number[];
+}
+
+export interface ShiftNoShowPayload {
+  worker_id: number;
+}
+
+export interface ShiftRematchPayload {
+  reason: 'worker_withdrew' | 'no_show' | 'ops';
+  excluded_worker_ids: number[];
 }
 
 export interface ShiftAcceptedPayload {

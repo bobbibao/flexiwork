@@ -75,7 +75,9 @@ export class TimerService implements OnApplicationBootstrap, OnModuleDestroy {
 
   /** Schedules `type` at `runAt`. The same dedupeKey is only scheduled once. */
   async schedule(type: string, runAt: Date, payload: Record<string, unknown>, dedupeKey: string): Promise<void> {
-    const delay = Math.max(0, runAt.getTime() - Date.now()) / timerSpeedup();
+    const real = Math.max(0, runAt.getTime() - Date.now());
+    // Dev speedup keeps a 5 s floor so accelerated deadlines never race the work they guard.
+    const delay = timerSpeedup() > 1 ? Math.max(real / timerSpeedup(), Math.min(real, 5000)) : real;
     const jobId = sanitize(`${type}__${dedupeKey}`);
     if (this.queue) {
       const opts: JobsOptions = {
