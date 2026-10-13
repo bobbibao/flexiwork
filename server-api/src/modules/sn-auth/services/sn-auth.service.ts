@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Inject, Injectable } from '@nestjs/common';
 import { Op } from 'sequelize';
 import { compareSync, hashSync } from '@node-rs/bcrypt';

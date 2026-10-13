@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import DlqMessage from 'src/database/models/dlq-messages.model';
 import { ConsumerRegistryService } from './consumer-registry.service';
 import { InMemoryMessageBroker } from './in-memory.message-broker';

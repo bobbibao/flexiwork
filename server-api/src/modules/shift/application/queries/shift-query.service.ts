@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Inject, Injectable } from '@nestjs/common';
 import ShiftView from 'src/database/models/shift-views.model';
 import { UnitOfWork } from 'src/shared/event-store/unit-of-work';
@@ -184,6 +185,9 @@ function normalize(row: any) {
 /** Workers do not see the employer's internal dispute notes or other workers' ids. */
 function redactForWorker(payload: any) {
   if (!payload || typeof payload !== 'object') return payload;
-  const { ranking_snapshot, worker_ids, remaining_offers, ...rest } = payload;
+  const rest = { ...payload };
+  delete rest.ranking_snapshot;
+  delete rest.worker_ids;
+  delete rest.remaining_offers;
   return rest;
 }

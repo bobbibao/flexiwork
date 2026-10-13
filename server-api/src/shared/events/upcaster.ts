@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 /**
  * Upcasters turn an old stored event payload into the current version (docs/ARCHITECTURE.md §6.3).
  * Register one per (type, fromVersion). Loading applies them in sequence.

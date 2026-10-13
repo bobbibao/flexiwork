@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Injectable, Logger } from '@nestjs/common';
 import * as webpush from 'web-push';
 import PushSubscription from 'src/database/models/push-subscriptions.model';

@@ -1,0 +1,502 @@
+# Generated from server-api/src/shared/contracts/events/*.ts (the TypeScript contracts are the source of truth;
+# payload fields are documented there). Regenerate after adding an event type. See docs/ARCHITECTURE.md §6.
+asyncapi: 3.0.0
+info:
+  title: Shift Network integration events
+  version: 0.1.0
+  description: >
+    At-least-once delivery through the transactional outbox (outbox_messages) and relay. Consumers are idempotent
+    per (consumer group, event_id) via processed_messages. Partition key = stream_id, so events of one aggregate
+    are ordered. After 5 failed attempts a message goes to dlq_messages + sn.dlq.v1 and can be replayed from
+    /api/sn/ops/dlq. MESSAGE_BUS_DRIVER=memory replaces Kafka with an in-process broker (single process only).
+defaultContentType: application/json
+servers:
+  dev:
+    host: localhost:9092
+    protocol: kafka
+    description: docker-compose.dev.yml (apache/kafka 3.9 KRaft)
+channels:
+  decision:
+    address: sn.decision.events.v1
+    description: "Events of stream_type 'decision' (contracts in src/shared/contracts/events/decision.events.ts)."
+    messages:
+      decision_recorded:
+        $ref: '#/components/messages/decision_recorded'
+  exception:
+    address: sn.exception.events.v1
+    description: "Events of stream_type 'exception' (contracts in src/shared/contracts/events/exception.events.ts)."
+    messages:
+      exception_case_opened:
+        $ref: '#/components/messages/exception_case_opened'
+      exception_case_resolved:
+        $ref: '#/components/messages/exception_case_resolved'
+  identity:
+    address: sn.identity.events.v1
+    description: "Events of stream_type 'identity' (contracts in src/shared/contracts/events/identity.events.ts)."
+    messages:
+      identity_worker_registered:
+        $ref: '#/components/messages/identity_worker_registered'
+      identity_worker_profile_updated:
+        $ref: '#/components/messages/identity_worker_profile_updated'
+      identity_employer_registered:
+        $ref: '#/components/messages/identity_employer_registered'
+      identity_employer_profile_updated:
+        $ref: '#/components/messages/identity_employer_profile_updated'
+      identity_work_location_created:
+        $ref: '#/components/messages/identity_work_location_created'
+      identity_work_location_updated:
+        $ref: '#/components/messages/identity_work_location_updated'
+  rating:
+    address: sn.rating.events.v1
+    description: "Events of stream_type 'rating' (contracts in src/shared/contracts/events/rating.events.ts)."
+    messages:
+      rating_reputation_changed:
+        $ref: '#/components/messages/rating_reputation_changed'
+  shift:
+    address: sn.shift.events.v1
+    description: "Events of stream_type 'shift' (contracts in src/shared/contracts/events/shift.events.ts)."
+    messages:
+      shift_posted:
+        $ref: '#/components/messages/shift_posted'
+      shift_offered:
+        $ref: '#/components/messages/shift_offered'
+      shift_offer_declined:
+        $ref: '#/components/messages/shift_offer_declined'
+      shift_offer_expired:
+        $ref: '#/components/messages/shift_offer_expired'
+      shift_accepted:
+        $ref: '#/components/messages/shift_accepted'
+      shift_escrow_funded:
+        $ref: '#/components/messages/shift_escrow_funded'
+      shift_worker_withdrew:
+        $ref: '#/components/messages/shift_worker_withdrew'
+      shift_rematch_requested:
+        $ref: '#/components/messages/shift_rematch_requested'
+      shift_worker_checked_in:
+        $ref: '#/components/messages/shift_worker_checked_in'
+      shift_no_show_recorded:
+        $ref: '#/components/messages/shift_no_show_recorded'
+      shift_worker_checked_out:
+        $ref: '#/components/messages/shift_worker_checked_out'
+      shift_disputed:
+        $ref: '#/components/messages/shift_disputed'
+      shift_dispute_resolved:
+        $ref: '#/components/messages/shift_dispute_resolved'
+      shift_completed:
+        $ref: '#/components/messages/shift_completed'
+      shift_paid:
+        $ref: '#/components/messages/shift_paid'
+      shift_rated:
+        $ref: '#/components/messages/shift_rated'
+      shift_ratings_closed:
+        $ref: '#/components/messages/shift_ratings_closed'
+      shift_cancelled:
+        $ref: '#/components/messages/shift_cancelled'
+      shift_expired:
+        $ref: '#/components/messages/shift_expired'
+  wallet:
+    address: sn.wallet.events.v1
+    description: "Events of stream_type 'wallet' (contracts in src/shared/contracts/events/wallet.events.ts)."
+    messages:
+      wallet_topup_succeeded:
+        $ref: '#/components/messages/wallet_topup_succeeded'
+      wallet_topup_failed:
+        $ref: '#/components/messages/wallet_topup_failed'
+      wallet_escrow_held:
+        $ref: '#/components/messages/wallet_escrow_held'
+      wallet_escrow_hold_failed:
+        $ref: '#/components/messages/wallet_escrow_hold_failed'
+      wallet_escrow_released:
+        $ref: '#/components/messages/wallet_escrow_released'
+      wallet_escrow_refunded:
+        $ref: '#/components/messages/wallet_escrow_refunded'
+      wallet_payout_requested:
+        $ref: '#/components/messages/wallet_payout_requested'
+      wallet_payout_settled:
+        $ref: '#/components/messages/wallet_payout_settled'
+      wallet_payout_failed:
+        $ref: '#/components/messages/wallet_payout_failed'
+  dlq:
+    address: sn.dlq.v1
+    description: "Dead letters: { original_topic, consumer_group, error, attempts, envelope }."
+    messages:
+      dead_letter:
+        $ref: '#/components/messages/dead_letter'
+operations:
+  publish_decision:
+    action: send
+    channel:
+      $ref: '#/channels/decision'
+    summary: Published by the outbox relay after the writing transaction commits.
+  publish_exception:
+    action: send
+    channel:
+      $ref: '#/channels/exception'
+    summary: Published by the outbox relay after the writing transaction commits.
+  publish_identity:
+    action: send
+    channel:
+      $ref: '#/channels/identity'
+    summary: Published by the outbox relay after the writing transaction commits.
+  publish_rating:
+    action: send
+    channel:
+      $ref: '#/channels/rating'
+    summary: Published by the outbox relay after the writing transaction commits.
+  publish_shift:
+    action: send
+    channel:
+      $ref: '#/channels/shift'
+    summary: Published by the outbox relay after the writing transaction commits.
+  publish_wallet:
+    action: send
+    channel:
+      $ref: '#/channels/wallet'
+    summary: Published by the outbox relay after the writing transaction commits.
+components:
+  messages:
+    decision_recorded:
+      name: decision.recorded
+      title: decision.recorded
+      summary: See src/shared/contracts/events/decision.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    exception_case_opened:
+      name: exception.case_opened
+      title: exception.case_opened
+      summary: See src/shared/contracts/events/exception.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    exception_case_resolved:
+      name: exception.case_resolved
+      title: exception.case_resolved
+      summary: See src/shared/contracts/events/exception.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    identity_worker_registered:
+      name: identity.worker_registered
+      title: identity.worker_registered
+      summary: See src/shared/contracts/events/identity.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    identity_worker_profile_updated:
+      name: identity.worker_profile_updated
+      title: identity.worker_profile_updated
+      summary: See src/shared/contracts/events/identity.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    identity_employer_registered:
+      name: identity.employer_registered
+      title: identity.employer_registered
+      summary: See src/shared/contracts/events/identity.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    identity_employer_profile_updated:
+      name: identity.employer_profile_updated
+      title: identity.employer_profile_updated
+      summary: See src/shared/contracts/events/identity.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    identity_work_location_created:
+      name: identity.work_location_created
+      title: identity.work_location_created
+      summary: See src/shared/contracts/events/identity.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    identity_work_location_updated:
+      name: identity.work_location_updated
+      title: identity.work_location_updated
+      summary: See src/shared/contracts/events/identity.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    rating_reputation_changed:
+      name: rating.reputation_changed
+      title: rating.reputation_changed
+      summary: See src/shared/contracts/events/rating.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_posted:
+      name: shift.posted
+      title: shift.posted
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_offered:
+      name: shift.offered
+      title: shift.offered
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_offer_declined:
+      name: shift.offer_declined
+      title: shift.offer_declined
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_offer_expired:
+      name: shift.offer_expired
+      title: shift.offer_expired
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_accepted:
+      name: shift.accepted
+      title: shift.accepted
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_escrow_funded:
+      name: shift.escrow_funded
+      title: shift.escrow_funded
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_worker_withdrew:
+      name: shift.worker_withdrew
+      title: shift.worker_withdrew
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_rematch_requested:
+      name: shift.rematch_requested
+      title: shift.rematch_requested
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_worker_checked_in:
+      name: shift.worker_checked_in
+      title: shift.worker_checked_in
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_no_show_recorded:
+      name: shift.no_show_recorded
+      title: shift.no_show_recorded
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_worker_checked_out:
+      name: shift.worker_checked_out
+      title: shift.worker_checked_out
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_disputed:
+      name: shift.disputed
+      title: shift.disputed
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_dispute_resolved:
+      name: shift.dispute_resolved
+      title: shift.dispute_resolved
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_completed:
+      name: shift.completed
+      title: shift.completed
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_paid:
+      name: shift.paid
+      title: shift.paid
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_rated:
+      name: shift.rated
+      title: shift.rated
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_ratings_closed:
+      name: shift.ratings_closed
+      title: shift.ratings_closed
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_cancelled:
+      name: shift.cancelled
+      title: shift.cancelled
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    shift_expired:
+      name: shift.expired
+      title: shift.expired
+      summary: See src/shared/contracts/events/shift.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    wallet_topup_succeeded:
+      name: wallet.topup_succeeded
+      title: wallet.topup_succeeded
+      summary: See src/shared/contracts/events/wallet.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    wallet_topup_failed:
+      name: wallet.topup_failed
+      title: wallet.topup_failed
+      summary: See src/shared/contracts/events/wallet.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    wallet_escrow_held:
+      name: wallet.escrow_held
+      title: wallet.escrow_held
+      summary: See src/shared/contracts/events/wallet.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    wallet_escrow_hold_failed:
+      name: wallet.escrow_hold_failed
+      title: wallet.escrow_hold_failed
+      summary: See src/shared/contracts/events/wallet.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    wallet_escrow_released:
+      name: wallet.escrow_released
+      title: wallet.escrow_released
+      summary: See src/shared/contracts/events/wallet.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    wallet_escrow_refunded:
+      name: wallet.escrow_refunded
+      title: wallet.escrow_refunded
+      summary: See src/shared/contracts/events/wallet.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    wallet_payout_requested:
+      name: wallet.payout_requested
+      title: wallet.payout_requested
+      summary: See src/shared/contracts/events/wallet.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    wallet_payout_settled:
+      name: wallet.payout_settled
+      title: wallet.payout_settled
+      summary: See src/shared/contracts/events/wallet.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    wallet_payout_failed:
+      name: wallet.payout_failed
+      title: wallet.payout_failed
+      summary: See src/shared/contracts/events/wallet.events.ts.
+      headers:
+        $ref: '#/components/schemas/Headers'
+      payload:
+        $ref: '#/components/schemas/EventEnvelope'
+    dead_letter:
+      name: dead_letter
+      payload:
+        type: object
+        properties:
+          original_topic: { type: string }
+          consumer_group: { type: string }
+          error: { type: string }
+          attempts: { type: integer }
+          envelope: { $ref: '#/components/schemas/EventEnvelope' }
+  schemas:
+    Headers:
+      type: object
+      properties:
+        type: { type: string, description: event type }
+        correlation_id: { type: string }
+    Actor:
+      type: object
+      required: [type, id]
+      properties:
+        type: { type: string, enum: [user, system, agent] }
+        id: { type: string }
+        role: { type: string, description: 'user role (worker, admin, manager, ops)' }
+    EventEnvelope:
+      type: object
+      description: src/shared/events/event-envelope.ts
+      required: [event_id, type, version, stream_type, stream_id, occurred_at, actor, correlation_id, payload]
+      properties:
+        event_id: { type: string, format: uuid }
+        type: { type: string, description: 'e.g. shift.accepted' }
+        version: { type: integer, description: 'payload schema version; older versions are upcast on read' }
+        stream_type: { type: string, enum: [shift, wallet, identity, rating, exception, decision] }
+        stream_id: { type: string, format: uuid }
+        stream_version: { type: [integer, 'null'], description: 'set for event-sourced streams (shift)' }
+        occurred_at: { type: string, format: date-time }
+        company_id: { type: [integer, 'null'] }
+        actor: { $ref: '#/components/schemas/Actor' }
+        correlation_id: { type: string }
+        causation_id: { type: [string, 'null'] }
+        idempotency_key: { type: string }
+        payload: { type: object, description: 'per event type, see the contracts file; money fields are integer VND' }

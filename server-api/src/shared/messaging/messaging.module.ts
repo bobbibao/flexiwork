@@ -7,6 +7,7 @@ import { OutboxService } from './outbox.service';
 import { OutboxRelayService } from './outbox-relay.service';
 import { InboxService } from './inbox.service';
 import { ConsumerRegistryService } from './consumer-registry.service';
+import { SnMetricsService } from './sn-metrics.service';
 import { snConfig } from '../sn-runtime';
 
 @Global()
@@ -26,7 +27,8 @@ import { snConfig } from '../sn-runtime';
     OutboxRelayService,
     InboxService,
     ConsumerRegistryService,
+    SnMetricsService,
   ],
-  exports: [MESSAGE_BROKER, OutboxService, OutboxRelayService, InboxService, ConsumerRegistryService],
+  exports: [MESSAGE_BROKER, OutboxService, OutboxRelayService, InboxService, ConsumerRegistryService, SnMetricsService],
 })
 export class MessagingModule {}

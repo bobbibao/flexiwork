@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Injectable } from '@nestjs/common';
 import { Transaction } from 'sequelize';
 import { EventSourcedRepository } from 'src/shared/event-store/event-sourced.repository';

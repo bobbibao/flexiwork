@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { EventSourcedRepository } from './event-sourced.repository';
 import { AggregateRoot } from './aggregate-root';
 import { ConcurrencyError } from './concurrency.error';

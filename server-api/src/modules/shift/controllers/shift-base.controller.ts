@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Response } from 'express';
 import User from 'src/database/models/users.model';
 import { SnBaseController } from 'src/shared/controllers/sn-base.controller';

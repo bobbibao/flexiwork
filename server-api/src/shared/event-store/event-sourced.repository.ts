@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Transaction } from 'sequelize';
 import { AggregateRoot } from './aggregate-root';
 import { EventStoreService } from './event-store.service';

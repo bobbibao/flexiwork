@@ -4,6 +4,7 @@ import { ignoreError, snConfig } from '../sn-runtime';
 import { LockService } from './lock.service';
 import { IdempotencyStore } from './idempotency.store';
 import { IdempotencyInterceptor } from './idempotency.interceptor';
+import { SnRateLimitGuard } from './rate-limit.guard';
 
 export const REDIS_CLIENT = 'REDIS_CLIENT';
 
@@ -37,7 +38,8 @@ class RedisCloser implements OnModuleDestroy {
     LockService,
     IdempotencyStore,
     IdempotencyInterceptor,
+    SnRateLimitGuard,
   ],
-  exports: [REDIS_CLIENT, LockService, IdempotencyStore, IdempotencyInterceptor],
+  exports: [REDIS_CLIENT, LockService, IdempotencyStore, IdempotencyInterceptor, SnRateLimitGuard],
 })
 export class RedisModule {}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Inject, Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { UnitOfWork } from '../event-store/unit-of-work';
 import { MESSAGE_BROKER, MessageBroker } from './message-broker.port';

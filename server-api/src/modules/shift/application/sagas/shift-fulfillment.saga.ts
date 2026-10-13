@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Injectable, Logger } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { Transaction } from 'sequelize';
 import { ConsumeEvents } from 'src/shared/messaging/consume-events.decorator';
 import { TimerService } from 'src/shared/timers/timer.service';
 import { TimerHandler } from 'src/shared/timers/timer-handler.decorator';
@@ -56,7 +56,7 @@ export class ShiftFulfillmentSaga {
   ) {}
 
   @ConsumeEvents({ group: 'sn-saga-shift', topics: [TOPICS.SHIFT, TOPICS.WALLET] })
-  async on(env: EventEnvelope, _t: Transaction): Promise<void> {
+  async on(env: EventEnvelope): Promise<void> {
     const ctx = causedBy(env, systemActor(SAGA));
     const p = env.payload;
     const id = env.stream_type === 'shift' ? env.stream_id : p.shift_id;

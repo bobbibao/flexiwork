@@ -447,6 +447,7 @@ export const locale = {
       VALIDATION_FAILED: "Thông tin chưa hợp lệ. Vui lòng kiểm tra lại các trường.",
       IDEMPOTENCY_KEY_REQUIRED: "Yêu cầu không hợp lệ (thiếu mã chống trùng lặp).",
       IDEMPOTENCY_IN_PROGRESS: "Yêu cầu đang được xử lý, vui lòng đợi.",
+      RATE_LIMITED: "Bạn thao tác quá nhanh, vui lòng thử lại sau ít phút.",
       CONCURRENT_MODIFICATION: "Dữ liệu vừa thay đổi. Vui lòng thử lại.",
       SN_ROUTE_FORBIDDEN: "Tài khoản không có quyền truy cập chức năng này.",
       SN_ACCOUNT_REQUIRED: "Tài khoản này không thuộc Flexiwork.",

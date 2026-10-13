@@ -1,6 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { Transaction } from 'sequelize';
 import { ConsumeEvents } from 'src/shared/messaging/consume-events.decorator';
 import { TimerService } from 'src/shared/timers/timer.service';
 import { TimerHandler } from 'src/shared/timers/timer-handler.decorator';
@@ -44,7 +43,7 @@ export class MatchShiftHandler {
   ) {}
 
   @ConsumeEvents({ group: 'sn-matching', topics: [TOPICS.SHIFT], types: [E.POSTED, E.REMATCH_REQUESTED, E.OFFER_DECLINED, E.OFFER_EXPIRED] })
-  async on(env: EventEnvelope, _t: Transaction): Promise<void> {
+  async on(env: EventEnvelope): Promise<void> {
     if (env.type === E.OFFER_DECLINED && env.payload.remaining_offers?.length) return;
     await this.match(env.stream_id, causedBy(env, systemActor('matching')));
   }

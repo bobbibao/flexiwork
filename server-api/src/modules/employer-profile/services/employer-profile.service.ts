@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Injectable } from '@nestjs/common';
 import { randomBytes, randomUUID } from 'crypto';
 import EmployerProfile from 'src/database/models/employer-profiles.model';

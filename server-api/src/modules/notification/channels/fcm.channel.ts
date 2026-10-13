@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Injectable, Logger } from '@nestjs/common';
 import PushSubscription from 'src/database/models/push-subscriptions.model';
 import { snConfig } from 'src/shared/sn-runtime';
@@ -18,6 +19,7 @@ export class FcmChannel implements NotificationChannel {
     if (this.messaging) return this.messaging;
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const admin = require('firebase-admin');
+    // eslint-disable-next-line @typescript-eslint/no-var-requires -- credentials file path comes from configuration at runtime
     const app = admin.apps.length ? admin.app() : admin.initializeApp({ credential: admin.credential.cert(require(snConfig().FCM_CREDENTIALS_PATH)) });
     this.messaging = app.messaging();
     return this.messaging;

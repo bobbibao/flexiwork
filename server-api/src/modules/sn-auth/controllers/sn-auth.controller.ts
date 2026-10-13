@@ -6,6 +6,7 @@ import { SnBaseController } from 'src/shared/controllers/sn-base.controller';
 import { AuditAction, AuditModule, CurrentUser, PublicRoute } from 'src/shared/decorators';
 import { AuditActionEnum, AuditModuleEnum } from 'src/shared/constants/audit.constants';
 import { snValidationPipe } from 'src/shared/pipes/sn-validation.pipe';
+import { SnRateLimit } from 'src/shared/redis/rate-limit.guard';
 import { RegisterEmployerDto, RegisterWorkerDto, SnLoginDto } from '../dto/sn-auth.dto';
 import { SnAuthService } from '../services/sn-auth.service';
 
@@ -19,6 +20,7 @@ export class SnAuthController extends SnBaseController {
   }
 
   @PublicRoute()
+  @SnRateLimit(10, 600)
   @Post('auth/worker/register')
   @ApiOperation({ summary: 'Register a worker (người lao động)', operationId: 'snRegisterWorker' })
   async registerWorker(@Res() res: Response, @Body() dto: RegisterWorkerDto) {
@@ -30,6 +32,7 @@ export class SnAuthController extends SnBaseController {
   }
 
   @PublicRoute()
+  @SnRateLimit(10, 600)
   @Post('auth/employer/register')
   @ApiOperation({ summary: 'Register an employer (doanh nghiệp)', operationId: 'snRegisterEmployer' })
   async registerEmployer(@Res() res: Response, @Body() dto: RegisterEmployerDto) {
@@ -41,6 +44,7 @@ export class SnAuthController extends SnBaseController {
   }
 
   @PublicRoute()
+  @SnRateLimit(20, 300)
   @Post('auth/login')
   @ApiOperation({ summary: 'Login with phone (workers) or email', operationId: 'snLogin' })
   async login(@Res() res: Response, @Body() dto: SnLoginDto) {

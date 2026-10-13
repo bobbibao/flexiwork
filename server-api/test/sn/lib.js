@@ -21,6 +21,7 @@ async function call(method, path, token, body) {
 
 const get = (path, token) => call('GET', path, token);
 const post = (path, token, body) => call('POST', path, token, body);
+const put = (path, token, body) => call('PUT', path, token, body);
 const login = async (identifier) => (await post('/auth/login', null, { identifier, password: PASSWORD })).access_token;
 
 async function waitFor(label, fn, timeoutMs = 20000, everyMs = 300) {
@@ -48,10 +49,10 @@ function assert(cond, message) {
 const LOCATION_HCMC = { id: '11111111-1111-4111-8111-111111111111', lat: 10.7769, lng: 106.7009 };
 
 async function topUp(token, amount) {
-  const before = (await get('/wallets/me', token)).balance_vnd;
-  await post('/wallets/me/top-ups', token, { amount_vnd: amount });
-  await waitFor('top-up settled', async () => (await get('/wallets/me', token)).balance_vnd === before + amount);
-  return before + amount;
+  // Wait on the intent, not the balance: timers of earlier shifts may move the employer balance concurrently.
+  const intent = await post('/wallets/me/top-ups', token, { amount_vnd: amount });
+  await waitFor('top-up settled', async () => (await get(`/wallets/me/intents/${intent.id}`, token)).status === 'succeeded');
+  return (await get('/wallets/me', token)).balance_vnd;
 }
 
 async function postShift(token, { startInMin = 20, hours = 4, hourly = 40000, skill = 'phuc_vu', title = 'Phục vụ bàn (smoke)', dispatch } = {}) {
@@ -78,4 +79,4 @@ async function offeredWorker(shiftId, employerToken) {
   return { workerId, token: await login(card.phone_e164), card };
 }
 
-module.exports = { BASE, get, post, login, waitFor, waitStatus, assert, topUp, postShift, offeredWorker, LOCATION_HCMC };
+module.exports = { BASE, get, post, put, login, waitFor, waitStatus, assert, topUp, postShift, offeredWorker, LOCATION_HCMC };

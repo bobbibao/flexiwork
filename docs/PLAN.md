@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | Ready for autonomous implementation |
+| Status | Implemented P0–P12 on 2026-10-10. See §Implementation status below; Kafka and Elasticsearch paths are compile-verified only |
 | Date | 2026-10-10 |
 | Companion | [ARCHITECTURE.md](ARCHITECTURE.md) (the *what* and *why*; this file is the *how* and *in which order*) |
 | Audience | The AI agent (or engineer) implementing it, and the reviewer approving each phase |
@@ -102,6 +102,48 @@ yarn install
 yarn dev:vite                    # http://localhost:8080, proxies /api → :7001
 yarn build:vite
 ```
+
+---
+
+## Implementation status (2026-10-10)
+
+All phases were implemented autonomously (user instruction: choose good answers to the open questions and implement). Commits on the local `git` repo use the phase IDs.
+
+| Phase | State | Evidence |
+|---|---|---|
+| P0 Groundwork | Done | `docker-compose.dev.yml`, `env/sn/`, version 0.1.0, `start:sn-dev` / `migrate:sn-dev` / `seed:sn-dev` scripts |
+| P1 Platform | Done | event store + outbox/inbox + relay, memory and Kafka brokers, CQRS, Redis locks/idempotency, BullMQ timers, search module, `main.worker.ts` |
+| P2–P8 Backend contexts | Done | identity/profiles, wallet/ledger/escrow + fake gateway + reconciliation, Shift aggregate + saga + check-in chain, matching, ratings, notifications, ops/autonomy |
+| P9 Vue 3.5 + Vite (`@vue/compat`) | Done | `yarn build:vite`; E2E S0 renders 14 legacy routes (3 pre-existing legacy defects classified, see below) |
+| P10–P11 Vietnamese shell + features | Done | E2E S1–S10 (Playwright library) |
+| P12 Hardening | Done except P12.2 | P12.1 `@SnRateLimit` guard (ADR-021); P12.2 deferred (ADR-025); P12.3 `SnMetricsService` log line + `/api/sn/health/deps`; P12.4 [asyncapi.yaml](asyncapi.yaml); `sn:rebuild-projection` (replay gives an identical `shift_views`); P12.5 run below; P12.6 not done (Q9 default = no) |
+
+**Verification run (in-memory bus, Postgres 16, Redis 8):** ESLint clean on SN code (domain-layer import rule enforced); `yarn test:sn` 10 suites / 43 tests; backend smokes `test/sn/smoke-happy-path.js`, `smoke-no-show.js` and `smoke-ops.js`; frontend `yarn e2e:sn` (legacy smoke + S1–S10). The API ran from `dist/` with `ENV_PATH=./env/sn`, using `SN_TIMER_SPEEDUP=120` for the smokes and `10` for the E2E run (`vite preview` on :8080).
+
+**Not verified at runtime:** the Kafka broker adapter, the Elasticsearch search adapter, web push delivery to a real browser push service, and FCM. No Docker was available in the implementing session, so they are only compile-verified. Run them with `docker compose -f docker-compose.dev.yml up -d`, `MESSAGE_BUS_DRIVER=kafka` and `SEARCH_DRIVER=elasticsearch`, then repeat the smokes before staging.
+
+**Pre-existing legacy defects found (documented, not fixed, because the work is additive only):**
+- The revenue report SQL references `invoices.metadata`, which doesn't exist.
+- `GET /api/invoices` returns a paginated object, but the invoices page iterates it as an array.
+- The timesheet/projects endpoint used by the timesheet page returns 404.
+- Legacy registration rolls back after commit when the mail send fails.
+- `main.ts` logs `process.env`.
+
+**Answers chosen for Appendix B:**
+- Q1: yes, one shift per worker slot.
+- Q2: escrow after acceptance, with a deadline.
+- Q3: PWA inside this app.
+- Q4: password now, with an OTP port later.
+- Q5: 10 % fee paid by the employer on top.
+- Q6: withhold 10 % PIT on payments ≥ 2,000,000 VND (configurable). An accountant should confirm this.
+- Q7: ARCHITECTURE §5.5–5.6 values, in `SN_*` env keys.
+- Q8: self-hosted dev, ES 8.
+- Q9: no legacy fixes.
+- Q10: register the legacy RBAC models without using them (ADR-015).
+- Q11: free text + codes + lat/lng.
+- Q12: local `git init`, done.
+- Q13: leave the Netlify config; `build:vite` was added.
+- Q14: a dedicated `flexiwork_sn_dev` database.
 
 ---
 
@@ -625,7 +667,7 @@ Every command call sends `Idempotency-Key: crypto.randomUUID()` (generated once 
 
 ## 15. P12 — Hardening and end-to-end runs
 
-- **P12.1 Rate limits:** `@nestjs/throttler` (Redis storage) on `/api/sn/auth/*` (10/min/IP) and webhooks.
+- **P12.1 Rate limits:** `@nestjs/throttler` (Redis storage) on `/api/sn/auth/*` (10/min/IP) and webhooks. *Implemented as the dependency-free `@SnRateLimit` guard (ADR-021): register 10/10 min, login 20/5 min, webhooks 120/min per IP, × `SN_RATE_LIMIT_FACTOR`.*
 - **P12.2 Optional Redis cache:** edit `app.module.ts` so `CACHE_DRIVER=redis` uses a Redis store via `CacheModule.registerAsync`. The default stays in-memory, so behaviour is unchanged.
 - **P12.3 Observability:** log outbox lag, consumer lag, DLQ size and timer backlog every minute in the worker; add `/api/sn/health/deps` checks.
 - **P12.4 Contracts doc:** write `docs/asyncapi.yaml` from `src/shared/contracts/events/*` (topics, keys, payload schemas).

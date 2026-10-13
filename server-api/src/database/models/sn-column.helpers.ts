@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { DataType } from 'sequelize-typescript';
 import { ModelAttributeColumnOptions } from 'sequelize';
 

@@ -41,6 +41,8 @@ export default () => ({
   ES_INDEX_PREFIX: process.env.ES_INDEX_PREFIX || 'sn',
   SN_TIME_ZONE: process.env.SN_TIME_ZONE || 'Asia/Ho_Chi_Minh',
   SN_TIMER_SPEEDUP: parseFloat(process.env.SN_TIMER_SPEEDUP) || 1,
+  SN_RATE_LIMIT_FACTOR: parseFloat(process.env.SN_RATE_LIMIT_FACTOR) || 1,
+  SN_METRICS_INTERVAL_SEC: parseInt(process.env.SN_METRICS_INTERVAL_SEC, 10) || 60,
   SN_OFFER_TTL_MIN: parseFloat(process.env.SN_OFFER_TTL_MIN) || 15,
   SN_SHIFT_MIN_LEAD_MIN: parseFloat(process.env.SN_SHIFT_MIN_LEAD_MIN) || 60,
   SN_ESCROW_DEADLINE_MIN: parseFloat(process.env.SN_ESCROW_DEADLINE_MIN) || 30,

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Table, Column, Model, DataType, PrimaryKey } from 'sequelize-typescript';
 
 @Table({ tableName: 'dlq_messages', timestamps: false, indexes: [{ fields: ['status', 'created_at'] }] })

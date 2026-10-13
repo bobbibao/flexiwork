@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Table, Column, Model, DataType, PrimaryKey } from 'sequelize-typescript';
 
 @Table({ tableName: 'decision_records', timestamps: false, indexes: [{ fields: ['subject_type', 'subject_id'] }, { fields: ['decision_point', 'created_at'] }] })

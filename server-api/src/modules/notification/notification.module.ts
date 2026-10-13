@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { SendMailService } from 'src/shared/services/send-mail.service';

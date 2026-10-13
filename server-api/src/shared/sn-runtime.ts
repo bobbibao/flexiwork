@@ -5,14 +5,16 @@ export const snConfig = () => configuration();
 
 export const isDevelopment = (): boolean => (process.env.NODE_ENV || 'development') === 'development';
 
-/** 'api' (src/main.ts) or 'worker' (src/main.worker.ts). */
-export const appRole = (): 'api' | 'worker' => (process.env.APP_ROLE === 'worker' ? 'worker' : 'api');
+/** 'api' (src/main.ts), 'worker' (src/main.worker.ts) or 'tool' (one-off scripts such as rebuild-projection.ts). */
+export const appRole = (): 'api' | 'worker' | 'tool' =>
+  process.env.APP_ROLE === 'worker' ? 'worker' : process.env.APP_ROLE === 'tool' ? 'tool' : 'api';
 
 /**
  * Whether this process runs background work (outbox relay, consumers, timer processors).
- * Worker role always; api role only with the in-memory bus (single-process dev).
+ * Worker role always; api role only with the in-memory bus (single-process dev); tool role never.
  */
-export const runsBackground = (): boolean => appRole() === 'worker' || snConfig().MESSAGE_BUS_DRIVER === 'memory';
+export const runsBackground = (): boolean =>
+  appRole() === 'worker' || (appRole() === 'api' && snConfig().MESSAGE_BUS_DRIVER === 'memory');
 
 /** Development-only timer acceleration (docs/ARCHITECTURE.md §5.5). */
 export const timerSpeedup = (): number => (isDevelopment() ? Math.max(1, snConfig().SN_TIMER_SPEEDUP) : 1);

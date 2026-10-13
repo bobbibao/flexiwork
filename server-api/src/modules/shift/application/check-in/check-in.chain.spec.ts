@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { AttendanceChain, AttendanceContext } from './check-in.chain';
 import { ShiftStatus } from '../../domain/shift-status.enum';
 import { currentQrToken } from 'src/shared/utils/qr-token';

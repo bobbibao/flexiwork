@@ -3,12 +3,57 @@
     "es2021": true,
     "node": true
   },
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"],
-  "rules": {}
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "rules": {},
+  "overrides": [
+    {
+      "files": [
+        "src/modules/*/domain/**/*.ts"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@nestjs/*"
+                ],
+                "message": "Domain layer must stay framework-free (docs/ARCHITECTURE.md \u00a715.2)"
+              },
+              {
+                "group": [
+                  "sequelize",
+                  "sequelize-typescript",
+                  "kafkajs",
+                  "ioredis",
+                  "bullmq",
+                  "@elastic/*"
+                ],
+                "message": "Domain layer must not import infrastructure"
+              },
+              {
+                "group": [
+                  "src/database/*",
+                  "src/database/**"
+                ],
+                "message": "Domain layer must not import persistence models"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }

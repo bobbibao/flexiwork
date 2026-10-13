@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Money } from 'src/shared/domain/money';
 import { computeReleaseSplits, JournalTemplates } from './journal-templates';
 import { journal } from './ledger-posting';

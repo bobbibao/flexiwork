@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { CallHandler, ExecutionContext, HttpException } from '@nestjs/common';
 import { lastValueFrom, of } from 'rxjs';
 import { IdempotencyInterceptor } from './idempotency.interceptor';

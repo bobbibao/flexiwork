@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Body, Controller, Get, Headers, Logger, Param, ParseUUIDPipe, Post, Query, Req, Res, UseGuards, UsePipes } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import User from 'src/database/models/users.model';
 import { SnBaseController } from 'src/shared/controllers/sn-base.controller';
+import { SnRateLimit } from 'src/shared/redis/rate-limit.guard';
 import { AuditAction, AuditModule, CurrentUser, PublicRoute } from 'src/shared/decorators';
 import { Idempotent } from 'src/shared/decorators/idempotent.decorator';
 import { AuditActionEnum, AuditModuleEnum } from 'src/shared/constants/audit.constants';
@@ -92,6 +94,7 @@ export class WalletController extends SnBaseController {
    * signs JSON.stringify(body). Real providers need the raw body: see PLAN.md P12.
    */
   @PublicRoute()
+  @SnRateLimit(120, 60)
   @Post('payments/webhooks/:provider')
   @ApiOperation({ summary: 'Payment provider webhook (HMAC-signed)', operationId: 'snPaymentWebhook' })
   async webhook(@Res() res: Response, @Req() req: Request, @Param('provider') provider: string) {

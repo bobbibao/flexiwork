@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Global, Inject, Injectable, Logger, Module, OnApplicationBootstrap } from '@nestjs/common';
 import { Client } from '@elastic/elasticsearch';
 import { SN_SHIFTS_INDEX } from './indices/sn-shifts.index';

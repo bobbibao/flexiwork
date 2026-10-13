@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Delivery, NotificationChannel } from './notification-channel';
+import { NotificationChannel } from './notification-channel';
 
 /** Port for SMS brandname / Zalo ZNS (⚠️ Q4: provider not chosen). Disabled in v1. */
 @Injectable()
@@ -8,7 +8,7 @@ export class SmsChannel implements NotificationChannel {
   enabled() {
     return false;
   }
-  async send(_d: Delivery) {
+  async send(): Promise<boolean> {
     return false;
   }
 }

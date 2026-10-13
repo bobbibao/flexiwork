@@ -1,5 +1,5 @@
 /* Dispute -> ops resolves with partial pay; first payout needs ops approval; reconciliation. */
-const { get, post, login, waitFor, waitStatus, assert, topUp, postShift, offeredWorker, LOCATION_HCMC } = require('./lib');
+const { get, post, put, login, waitFor, waitStatus, assert, topUp, postShift, offeredWorker, LOCATION_HCMC } = require('./lib');
 
 (async () => {
   console.log('Ops branch: dispute + payout approval + reconciliation');
@@ -33,6 +33,9 @@ const { get, post, login, waitFor, waitStatus, assert, topUp, postShift, offered
   assert(employerAfter - employerBefore === paid.refund_vnd && paid.refund_vnd > 0, `employer refunded ${paid.refund_vnd}`);
 
   // First payout of a worker always needs a human (autonomy: payout.approval)
+  if (!(await get('/workers/me', worker)).bank_account) {
+    await put('/workers/me', worker, { bank_account: { bank_name: 'Vietcombank', account_number: '0123456789', account_holder: 'NGUOI LAO DONG' } });
+  }
   const balance = (await get('/wallets/me', worker)).balance_vnd;
   const intent = await post('/wallets/me/payouts', worker, { amount_vnd: 50000 }).catch((e) => {
     if (e.body?.code === 'INSUFFICIENT_FUNDS') return null;

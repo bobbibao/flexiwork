@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Inject, Injectable } from '@nestjs/common';
 import type Redis from 'ioredis';
 import type { Client } from '@elastic/elasticsearch';

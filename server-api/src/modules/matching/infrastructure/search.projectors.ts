@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { Client } from '@elastic/elasticsearch';
-import { Transaction } from 'sequelize';
 import WorkerProfile from 'src/database/models/worker-profiles.model';
 import { ConsumeEvents } from 'src/shared/messaging/consume-events.decorator';
 import { EventEnvelope } from 'src/shared/events/event-envelope';
@@ -25,7 +25,7 @@ export class SearchProjectors {
   ) {}
 
   @ConsumeEvents({ group: 'sn-proj-es-shifts', topics: [TOPICS.SHIFT] })
-  async onShift(env: EventEnvelope, _t: Transaction): Promise<void> {
+  async onShift(env: EventEnvelope): Promise<void> {
     if (!this.es) return;
     const shift = await this.shifts.load(env.stream_id);
     if (!shift) return;
@@ -65,7 +65,7 @@ export class SearchProjectors {
     topics: [TOPICS.IDENTITY, TOPICS.RATING],
     types: ['identity.worker_registered', 'identity.worker_profile_updated', 'rating.reputation_changed'],
   })
-  async onWorker(env: EventEnvelope, _t: Transaction): Promise<void> {
+  async onWorker(env: EventEnvelope): Promise<void> {
     if (!this.es) return;
     const userId = env.payload.user_id ?? (env.payload.subject_type === 'worker' ? env.payload.subject_id : null);
     if (!userId) return;

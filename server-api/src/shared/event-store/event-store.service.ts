@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Injectable } from '@nestjs/common';
 import { Transaction, UniqueConstraintError } from 'sequelize';
 import EventStoreEntry from 'src/database/models/event-store.model';

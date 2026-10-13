@@ -1213,5 +1213,16 @@ With `MESSAGE_BUS_DRIVER=memory`, the worker process is optional.
 | ADR-010 | New routes under `/api/sn/*`; legacy isolation interceptor for new roles | Accepted |
 | ADR-011 | Frontend: Vue 3.5 + Vite via `@vue/compat`; keep the `src/features` structure; Vietnamese only (`vi`), legacy menu hidden | Accepted (user) |
 | ADR-012 | Ready for agents: actor model, decision points with autonomy modes, `DecisionProvider` port, exception queue; no agent built | Accepted |
-| ADR-013 | One shift = one worker slot; headcount N → N shifts sharing `job_ref` | Proposed ⚠️ Q1 |
-| ADR-014 | Escrow funded after acceptance (as specified), with a funding deadline | Proposed ⚠️ Q2 |
+| ADR-013 | One shift = one worker slot; headcount N → N shifts sharing `job_ref` | Accepted (default, Q1) |
+| ADR-014 | Escrow funded after acceptance (as specified), with a funding deadline | Accepted (default, Q2) |
+| ADR-015 | Register the legacy `Role`, `UserRoles`, `AccessControl` models in `SN_MODELS`: they were never registered, and their associations made the baseline fail to boot | Accepted (implementation) |
+| ADR-016 | Frontend SN pages use their own shell (`src/features/sn-shell`) instead of editing the Metronic `Menu.vue`; `/` redirects to `/sn`; legacy routes stay reachable by URL | Accepted (implementation) |
+| ADR-017 | SN frontend calls go through `src/api/sn-api.ts` (keeps the error `code`, sends `Idempotency-Key`) with its own `sn_access_token`, so the legacy session and token are untouched | Accepted (implementation) |
+| ADR-018 | Check-in QR codes are per work location (rotating HMAC token, `src/shared/utils/qr-token.ts`), shown by the employer on a device at the site | Accepted (implementation) |
+| ADR-019 | Notification templates are Vietnamese TypeScript constants (versioned with code) rather than DB rows | Accepted (implementation) |
+| ADR-020 | Timers use BullMQ directly (`src/shared/timers`), not `@nestjs/bullmq`; in-process fallback without Redis. Dev `SN_TIMER_SPEEDUP` keeps a 5 s floor. A 5 s sweeper promotes overdue delayed jobs (a missed wake-up was seen locally with BullMQ 5.81 + Redis 8.10) | Accepted (implementation) |
+| ADR-021 | Rate limiting is a small Redis fixed-window guard (`src/shared/redis/rate-limit.guard.ts`, `@SnRateLimit`) instead of `@nestjs/throttler`: no new dependency, SN routes only, `SN_RATE_LIMIT_FACTOR` for dev/E2E | Accepted (implementation) |
+| ADR-022 | Observability v1 is a periodic structured log line (`SnMetricsService`) plus `/api/sn/health/deps`; a Prometheus exporter can reuse the same queries | Accepted (implementation) |
+| ADR-023 | UI verification uses the Playwright **library** (`frontend/e2e-sn/`) because no Playwright MCP tools were available in the implementing session; the scenarios match PLAN §17.4 | Accepted (implementation) |
+| ADR-024 | Frontend compat details: `vue3-apexcharts` pinned to ~1.4.4 (1.8 needs apexcharts ≥ 4; the legacy charts use apexcharts 3.x), vuelidate 0.7 patched via `.yarn/patches`, `@vue/compat` MODE 2 globally and MODE 3 for SN components | Accepted (implementation) |
+| ADR-025 | `CACHE_DRIVER=redis` (PLAN P12.2) is deferred: it needs a cache-manager Redis store dependency and nothing in SN depends on the legacy cache | Deferred |

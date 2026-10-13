@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import DecisionRecord from 'src/database/models/decision-records.model';

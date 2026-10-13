@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { GeoPoint } from 'src/shared/domain/geo-point';
 import { Shift, PostShiftInput } from './shift.aggregate';
 import { ShiftStatus as S } from './shift-status.enum';

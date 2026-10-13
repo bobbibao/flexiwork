@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { AggregateRoot } from 'src/shared/event-store/aggregate-root';
 import { DomainEvent } from 'src/shared/events/domain-event';
 import { Money } from 'src/shared/domain/money';
