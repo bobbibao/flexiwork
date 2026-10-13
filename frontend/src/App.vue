@@ -24,6 +24,7 @@
 <script>
 import { OVERRIDE_LAYOUT_CONFIG } from "@/core/services/store/config.module";
 import ApiService from "./core/services/api.service";
+import JwtService from "./core/services/jwt.service";
 
 export default {
   name: "ArchApp",
@@ -55,7 +56,8 @@ export default {
     async checkAndShowToast() {
       // Check if the route is excluded from the toast notification
       const excludedRoutesRegex = /^(\/(login|register|forgot-password|reset-password|verify-register(\/[\w-]+)?))|^\/report\/.+$|^\/sn(\/|$)/; // Shift Network pages use their own session
-      if (this.$route.path.match(excludedRoutesRegex) || this.toastShown) {
+      // Without a legacy session the call can only fail with 401 (e.g. Shift Network pages, first load).
+      if (!JwtService.getToken() || this.$route.path.match(excludedRoutesRegex) || this.toastShown) {
         return;
       }
       // Handle the toast notification logic

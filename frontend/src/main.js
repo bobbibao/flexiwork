@@ -36,6 +36,8 @@ configureCompat({ MODE: 2, ATTR_FALSE_VALUE: "suppress-warning", COMPONENT_V_MOD
 ApiService.init();
 
 router.beforeEach((to, from, next) => {
+  // Shift Network routes have their own session guard (src/sn-routes.js) and must not run the legacy VERIFY_AUTH.
+  if (to.path.startsWith("/sn")) return next();
   // Ensure we checked auth before each page load.
   // vue-router 4: next() must be called without arguments (an array would be treated as a redirect).
   Promise.all([store.dispatch(VERIFY_AUTH)]).then(() => next());

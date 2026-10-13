@@ -7,7 +7,8 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      redirect: "/dashboard",
+      // Shift Network is the product entry point; the legacy ArchApp dashboard stays at /#/dashboard.
+      redirect: "/sn",
       component: () => import("@/view/layout/Layout"),
       children: [
         {

@@ -45,7 +45,7 @@ async function shot(page, name) {
 async function vietnameseCheck(page) {
   return page.evaluate(() => {
     const t = document.body.innerText;
-    const missingKeys = t.match(/\b(sn|menu|button|common)\.[A-Za-z_.]+\b/g) || [];
+    const missingKeys = [...(t.match(/\b(sn|menu|button|common)\.[A-Za-z_.]+\b/g) || []), ...(t.match(/\b(shift|wallet|identity|rating|exception|decision)\.[a-z_]{3,}\b/g) || [])];
     const foreign = ["Speichern", "Löschen", "Abbrechen", "Projekt", "Rechnung", "Offerte", "Save", "Cancel", "Delete", "Submit", "Loading", "Search", "Settings"].filter(w =>
       new RegExp(`\\b${w}\\b`).test(t)
     );

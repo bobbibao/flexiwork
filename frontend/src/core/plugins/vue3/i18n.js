@@ -6,15 +6,17 @@ import { locale as es } from "@/core/config/i18n/es";
 import { locale as jp } from "@/core/config/i18n/jp";
 import { locale as de } from "@/core/config/i18n/de";
 import { locale as fr } from "@/core/config/i18n/fr";
+import { locale as vi } from "@/core/config/i18n/vi";
 
-const lang = localStorage.getItem("language") || "de";
+// Vietnamese is the default UI language (docs/ARCHITECTURE.md §17.4); legacy screens fall back to English for keys not in vi.js.
+const lang = localStorage.getItem("language") || "vi";
 
 const i18n = createI18n({
   legacy: true,
   globalInjection: true,
   locale: lang,
   fallbackLocale: "en",
-  messages: { en, ch, es, jp, de, fr },
+  messages: { vi, en, ch, es, jp, de, fr },
   silentTranslationWarn: true,
   silentFallbackWarn: true,
   warnHtmlMessage: false

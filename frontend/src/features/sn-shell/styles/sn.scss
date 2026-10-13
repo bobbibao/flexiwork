@@ -1,0 +1,157 @@
+// Shift Network shell styles (mobile-first). Uses Metronic/Bootstrap utilities already loaded by App.vue.
+$sn-primary: #5867dd;
+$sn-bg: #f3f6f9;
+
+.sn-app {
+  min-height: 100vh;
+  background: $sn-bg;
+  display: flex;
+  flex-direction: column;
+}
+.sn-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #fff;
+  border-bottom: 1px solid #ebedf3;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 12px;
+}
+.sn-brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: $sn-primary;
+  text-decoration: none;
+  white-space: nowrap;
+  &:hover { text-decoration: none; color: darken($sn-primary, 10%); }
+}
+.sn-nav {
+  display: none;
+  gap: 4px;
+  flex: 1;
+  overflow-x: auto;
+  a {
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: #3f4254;
+    font-weight: 500;
+    white-space: nowrap;
+    text-decoration: none;
+    &.router-link-active { background: rgba($sn-primary, 0.1); color: $sn-primary; }
+    &:hover { background: #f3f6f9; text-decoration: none; }
+  }
+  @media (min-width: 992px) { display: flex; }
+}
+.sn-spacer { flex: 1; @media (min-width: 992px) { display: none; } }
+.sn-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  .sn-user-name { max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; @media (max-width: 575px) { display: none; } }
+}
+.sn-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 12px 88px;
+  @media (min-width: 992px) { padding: 24px 24px 32px; }
+}
+.sn-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: #fff;
+  border-top: 1px solid #ebedf3;
+  display: flex;
+  justify-content: space-around;
+  padding: 6px 0 calc(6px + env(safe-area-inset-bottom));
+  a {
+    flex: 1;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #7e8299;
+    text-decoration: none;
+    padding: 4px 2px;
+    i { display: block; font-size: 1.35rem; margin-bottom: 2px; }
+    &.router-link-active { color: $sn-primary; font-weight: 600; }
+  }
+  @media (min-width: 992px) { display: none; }
+}
+.sn-page-title {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: #181c32;
+}
+.sn-page-subtitle { color: #7e8299; margin-bottom: 16px; }
+.sn-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.sn-list-item {
+  display: block;
+  color: inherit;
+  text-decoration: none !important;
+  transition: box-shadow 0.15s;
+  &:hover { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); color: inherit; }
+}
+.sn-money { font-weight: 600; color: #1bc5bd; white-space: nowrap; }
+.sn-muted { color: #7e8299; font-size: 0.9rem; }
+.sn-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sn-kv { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #ebedf3; gap: 12px; &:last-child { border-bottom: 0; } span:first-child { color: #7e8299; } span:last-child { text-align: right; font-weight: 500; } }
+.sn-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  margin-bottom: 12px;
+  padding-bottom: 2px;
+  button {
+    border: 1px solid #e4e6ef;
+    background: #fff;
+    border-radius: 20px;
+    padding: 6px 14px;
+    white-space: nowrap;
+    font-size: 0.9rem;
+    color: #3f4254;
+    &.active { background: $sn-primary; border-color: $sn-primary; color: #fff; }
+    .badge { margin-left: 4px; }
+  }
+}
+.sn-form {
+  label { font-weight: 500; margin-bottom: 4px; }
+  .form-group { margin-bottom: 14px; }
+}
+.sn-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; .btn { min-height: 42px; } }
+.sn-empty { text-align: center; color: #7e8299; padding: 32px 12px; }
+.sn-auth {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: linear-gradient(135deg, #eef0fc 0%, #f3f6f9 100%);
+  .sn-auth-card { width: 100%; max-width: 440px; background: #fff; border-radius: 14px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06); padding: 28px 22px; }
+  .sn-auth-brand { text-align: center; margin-bottom: 18px; h1 { color: $sn-primary; font-weight: 700; font-size: 1.8rem; margin: 0; } p { color: #7e8299; margin: 4px 0 0; } }
+}
+.sn-chip {
+  display: inline-block;
+  border: 1px solid #e4e6ef;
+  border-radius: 16px;
+  padding: 4px 12px;
+  margin: 0 6px 6px 0;
+  cursor: pointer;
+  user-select: none;
+  background: #fff;
+  &.active { background: rgba($sn-primary, 0.12); border-color: $sn-primary; color: $sn-primary; font-weight: 500; }
+}
+.sn-stars button { background: none; border: 0; font-size: 1.8rem; color: #e4e6ef; padding: 0 2px; &.on { color: #ffa800; } }
+.sn-qr { text-align: center; img { width: 220px; height: 220px; } .sn-qr-code { font-family: monospace; font-size: 1.4rem; letter-spacing: 2px; font-weight: 600; margin-top: 8px; word-break: break-all; } }

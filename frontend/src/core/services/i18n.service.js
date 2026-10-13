@@ -1,7 +1,12 @@
 const i18nService = {
-  defaultLanguage: "de",
+  defaultLanguage: "vi",
 
   languages: [
+    {
+      lang: "vi",
+      name: "Tiếng Việt",
+      flag: process.env.BASE_URL + "media/svg/flags/220-vietnam.svg"
+    },
     {
       lang: "de",
       name: "Deutsch",

@@ -1,0 +1,21 @@
+.sn-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1050;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  @media (min-width: 576px) { align-items: center; }
+}
+.sn-modal {
+  background: #fff;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 14px 14px 0 0;
+  @media (min-width: 576px) { border-radius: 12px; }
+}
+.sn-modal-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid #ebedf3; }
+.sn-modal-body { padding: 16px; }

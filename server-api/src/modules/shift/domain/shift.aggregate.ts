@@ -542,7 +542,13 @@ export class Shift extends AggregateRoot {
       worker_id: s.workerId,
       offered_worker_ids: s.offeredWorkerIds,
       offer_expires_at: s.offerExpiresAt?.toISOString() ?? null,
-      escrow_status: s.escrowHeld ? 'held' : 'none',
+      escrow_status: !s.escrowHeld
+        ? 'none'
+        : [S.PAID, S.RATED].includes(s.status!)
+          ? 'released'
+          : s.status === S.CANCELLED
+            ? 'refunded'
+            : 'held',
       checked_in_at: s.checkedInAt?.toISOString() ?? null,
       checked_out_at: s.checkedOutAt?.toISOString() ?? null,
       worked_minutes: s.workedMinutes,
