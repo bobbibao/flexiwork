@@ -3,11 +3,11 @@
   <div class="card card-custom bg-gray-100 gutter-b">
     <!--begin::Body-->
     <div class="card-body p-0 position-relative overflow-hidden rounded-lg">
-      <v-img src="/media/bg/bg-1.jpg" alt="bg">
+      <div class="welcome-bg" style="background: url(/media/bg/bg-1.jpg) center / cover">
         <h3 class="font-weight-bolder text-white py-8 welcome-text">
           {{ $t("dashboard.hello") }}, {{ currentUser.email }}
         </h3>
-      </v-img>
+      </div>
       <!--begin::Stats-->
       <div class="card-spacer mt-n20">
         <!--begin::Row-->

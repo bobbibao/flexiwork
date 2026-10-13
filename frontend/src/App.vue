@@ -54,7 +54,7 @@ export default {
   methods: {
     async checkAndShowToast() {
       // Check if the route is excluded from the toast notification
-      const excludedRoutesRegex = /^(\/(login|register|forgot-password|reset-password|verify-register(\/[\w-]+)?))|^\/report\/.+$/;
+      const excludedRoutesRegex = /^(\/(login|register|forgot-password|reset-password|verify-register(\/[\w-]+)?))|^\/report\/.+$|^\/sn(\/|$)/; // Shift Network pages use their own session
       if (this.$route.path.match(excludedRoutesRegex) || this.toastShown) {
         return;
       }

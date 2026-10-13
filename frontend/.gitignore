@@ -13,7 +13,8 @@ yarn-debug.log*
 yarn-error.log*
 .yarnrc.yml
 yarn.lock
-.yarn
+.yarn/*
+!.yarn/patches
 
 # Editor directories and files
 .idea

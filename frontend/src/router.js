@@ -1,11 +1,9 @@
-import Vue from "vue";
-import Router from "vue-router";
-import Meta from "vue-meta";
+import { createRouter, createWebHashHistory } from "vue-router";
+import { snRoutes, snAuthRoutes, installSnGuards } from "./sn-routes";
 
-Vue.use(Router);
-Vue.use(Meta);
-
-export default new Router({
+// vue-router 4, hash history keeps the existing URLs (vue-router 3 default mode was "hash").
+const router = createRouter({
+  history: createWebHashHistory(),
   routes: [
     {
       path: "/",
@@ -253,8 +251,10 @@ export default new Router({
         }
       ]
     },
+    ...snRoutes,
+    ...snAuthRoutes,
     {
-      path: "*",
+      path: "/:pathMatch(.*)*",
       redirect: "/404"
     },
     {
@@ -340,3 +340,7 @@ export default new Router({
     }
   ]
 });
+
+installSnGuards(router);
+
+export default router;

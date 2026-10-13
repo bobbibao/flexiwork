@@ -77,9 +77,9 @@
           class="scroll pr-7 mr-n7"
           style="max-height: 40vh; position: relative"
         >
-          <template v-for="(item, i) in list1">
+          <template :key="i" v-for="(item, i) in list1">
             <!--begin::Item-->
-            <div class="d-flex align-items-center mb-6" v-bind:key="i">
+            <div class="d-flex align-items-center mb-6">
               <!--begin::Symbol-->
               <div
                 class="symbol symbol-40 mr-5"
@@ -121,8 +121,8 @@
           class="navi navi-hover scroll my-4"
           style="max-height: 40vh; position: relative"
         >
-          <template v-for="(item, i) in list2">
-            <a href="#" class="navi-item" v-bind:key="i">
+          <template :key="i" v-for="(item, i) in list2">
+            <a href="#" class="navi-item">
               <div class="navi-link">
                 <div class="navi-icon mr-2">
                   <i v-bind:class="item.icon"></i>

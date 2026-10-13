@@ -1,14 +1,13 @@
 /* eslint-disable */
-import Vue from "vue";
+// Vue 3.5 + @vue/compat bootstrap (docs/PLAN.md P9.3). Plugins are registered from src/core/plugins/vue3/.
+import { createApp, configureCompat } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "@/core/services/store";
 import ApiService from "@/core/services/api.service";
-// import MockService from "@/core/mock/mock.service";
 import { VERIFY_AUTH } from "@/core/services/store/auth.module";
 import { RESET_LAYOUT_CONFIG } from "@/core/services/store/config.module";
-
-Vue.config.productionTip = false;
+import { createPinia } from "pinia";
 
 // Global 3rd party plugins
 import "popper.js";
@@ -18,31 +17,28 @@ window.PerfectScrollbar = PerfectScrollbar;
 import ClipboardJS from "clipboard";
 window.ClipboardJS = ClipboardJS;
 
-// Vue 3rd party plugins
-import i18n from "@/core/plugins/vue-i18n";
-import vuetify from "@/core/plugins/vuetify";
-import "@/core/plugins/portal-vue";
-import "@/core/plugins/bootstrap-vue";
-import "@/core/plugins/perfect-scrollbar";
-import "@/core/plugins/highlight-js";
-import "@/core/plugins/inline-svg";
-import "@/core/plugins/apexcharts";
-import "@/core/plugins/metronic";
+// Vue plugins (Vue 3 versions)
+import i18n from "@/core/plugins/vue3/i18n";
+import BootstrapVuePlugin from "@/core/plugins/vue3/bootstrap-vue";
+import ComponentsPlugin from "@/core/plugins/vue3/components";
+import MetaTitlePlugin from "@/core/plugins/vue3/meta-title";
+import "@/core/plugins/vue3/metronic";
 import "@mdi/font/css/materialdesignicons.css";
 
-// Timezone
+// Timezone (legacy behaviour kept: new Shift Network code does not use moment)
 import moment from "moment-timezone";
 moment.tz.setDefault("Europe/London"); //force all submit time using moment in GMT +0
+
+// Vue 2 behaviours the legacy screens and bootstrap-vue still rely on
+configureCompat({ MODE: 2, ATTR_FALSE_VALUE: "suppress-warning", COMPONENT_V_MODEL: "suppress-warning" });
 
 // API service init
 ApiService.init();
 
-// Remove this to disable mock API
-// MockService.init();
-
 router.beforeEach((to, from, next) => {
   // Ensure we checked auth before each page load.
-  Promise.all([store.dispatch(VERIFY_AUTH)]).then(next);
+  // vue-router 4: next() must be called without arguments (an array would be treated as a redirect).
+  Promise.all([store.dispatch(VERIFY_AUTH)]).then(() => next());
 
   // reset config to initial state
   store.dispatch(RESET_LAYOUT_CONFIG);
@@ -53,10 +49,12 @@ router.beforeEach((to, from, next) => {
   }, 100);
 });
 
-new Vue({
-  router,
-  store,
-  i18n,
-  vuetify,
-  render: h => h(App)
-}).$mount("#app");
+const app = createApp(App);
+app.use(createPinia());
+app.use(router);
+app.use(store);
+app.use(i18n);
+app.use(BootstrapVuePlugin);
+app.use(ComponentsPlugin);
+app.use(MetaTitlePlugin);
+app.mount("#app");

@@ -299,6 +299,7 @@
               </div>
 
               <draggable
+                :item-key="(el) => periods.indexOf(el)"
                 :list="periods"
                 class="item-group"
                 ghost-class="ghost"
@@ -306,111 +307,113 @@
                 @end="draggingPeriod = false"
                 handle=".handle"
               >
-                <div v-for="(item, i) in periods" :key="i">
-                  <div class="row mb-2">
-                    <div class="col-md-2">
-                      <b-input-group>
+                <template #item="{ element: item, index: i }">
+                  <div>
+                    <div class="row mb-2">
+                      <div class="col-md-2">
+                        <b-input-group>
+                          <b-form-input
+                            :id="`startdate_${i}`"
+                            :value="formatDate(item.start_date)"
+                            type="text"
+                            autocomplete="off"
+                            placeholder="dd.mm.yyyy"
+                            @blur="formatWorkloadStartInvert(i)"
+                          ></b-form-input>
+                          <b-input-group-append>
+                            <b-form-datepicker
+                              v-model="item.start_date"
+                              :locale="locale"
+                              :start-weekday="1"
+                              button-only
+                              right
+                            ></b-form-datepicker>
+                          </b-input-group-append>
+                        </b-input-group>
+                      </div>
+                      <div class="col-md-2">
+                        <b-input-group>
+                          <b-form-input
+                            :id="`enddate_${i}`"
+                            :value="formatDate(item.end_date)"
+                            type="text"
+                            autocomplete="off"
+                            placeholder="dd.mm.yyyy"
+                            @blur="formatWorkloadEndInvert(i)"
+                          ></b-form-input>
+                          <b-input-group-append>
+                            <b-form-datepicker
+                              v-model="item.end_date"
+                              :locale="locale"
+                              :start-weekday="1"
+                              button-only
+                              right
+                            ></b-form-datepicker>
+                          </b-input-group-append>
+                        </b-input-group>
+                      </div>
+                      <div class="col-md-1">
                         <b-form-input
-                          :id="`startdate_${i}`"
-                          :value="formatDate(item.start_date)"
-                          type="text"
-                          autocomplete="off"
-                          placeholder="dd.mm.yyyy"
-                          @blur="formatWorkloadStartInvert(i)"
+                          v-model="item.work_percent"
+                          :id="`detail_weekly_${i}`"
+                          class="weekly-input"
+                          style="text-align: right"
+                          @blur="calculateDailyWorkload(i, item.work_percent, item.planning_percent)"
                         ></b-form-input>
-                        <b-input-group-append>
-                          <b-form-datepicker
-                            v-model="item.start_date"
-                            :locale="locale"
-                            :start-weekday="1"
-                            button-only
-                            right
-                          ></b-form-datepicker>
-                        </b-input-group-append>
-                      </b-input-group>
-                    </div>
-                    <div class="col-md-2">
-                      <b-input-group>
+                      </div>
+                      <div class="col-md-1">
                         <b-form-input
-                          :id="`enddate_${i}`"
-                          :value="formatDate(item.end_date)"
-                          type="text"
-                          autocomplete="off"
-                          placeholder="dd.mm.yyyy"
-                          @blur="formatWorkloadEndInvert(i)"
+                          v-model="item.actual_hours_per_day"
+                          :id="`detail_daily_${i}`"
+                          class="daily-input"
+                          style="text-align: right"
                         ></b-form-input>
-                        <b-input-group-append>
-                          <b-form-datepicker
-                            v-model="item.end_date"
-                            :locale="locale"
-                            :start-weekday="1"
-                            button-only
-                            right
-                          ></b-form-datepicker>
-                        </b-input-group-append>
-                      </b-input-group>
-                    </div>
-                    <div class="col-md-1">
-                      <b-form-input
-                        v-model="item.work_percent"
-                        :id="`detail_weekly_${i}`"
-                        class="weekly-input"
-                        style="text-align: right"
-                        @blur="calculateDailyWorkload(i, item.work_percent, item.planning_percent)"
-                      ></b-form-input>
-                    </div>
-                    <div class="col-md-1">
-                      <b-form-input
-                        v-model="item.actual_hours_per_day"
-                        :id="`detail_daily_${i}`"
-                        class="daily-input"
-                        style="text-align: right"
-                      ></b-form-input>
-                    </div>
-                    <div class="col-md-2">
-                      <b-form-input
-                        v-model="item.latest_flex_hours"
-                        :id="`latest_flex_${i}`"
-                        class="flex-input"
-                        style="text-align: right"
-                      ></b-form-input>
-                    </div>
-                    <!-- <div class="col-md-1">
-                      <b-form-input
-                        v-model="item.planning_percent"
-                        :id="`percent_planning_${i}`"
-                        class="planning-percent-input"
-                        style="text-align: right"
-                        @blur="
-                          calculateDailyWorkload(
-                            i,
-                            item.work_percent,
-                            item.planning_percent
-                          )
-                        "
-                      ></b-form-input>
-                    </div>
-                    <div class="col-md-1">
-                      <b-form-input
-                        v-model="item.actual_planning_per_day"
-                        :id="`detail_planning_${i}`"
-                        class="planning-hour-input"
-                        style="text-align: right"
-                      ></b-form-input>
-                    </div> -->
-                    <div class="col-md-2">
-                      <b-button variant="primary" class="minus-btn mr-2" @click="removeWorkloadItem(i)">
-                        <i class="flaticon2-line p-0"></i>
-                      </b-button>
-                      <b-button variant="primary" class="plus-btn mr-2" @click="addWorkloadItem(i)">
-                        <i class="flaticon2-plus p-0"></i>
-                      </b-button>
-                      <b-button variant="primary">
-                        <i class="flaticon2-sort handle p-0"></i>
-                      </b-button>
+                      </div>
+                      <div class="col-md-2">
+                        <b-form-input
+                          v-model="item.latest_flex_hours"
+                          :id="`latest_flex_${i}`"
+                          class="flex-input"
+                          style="text-align: right"
+                        ></b-form-input>
+                      </div>
+                      <!-- <div class="col-md-1">
+                        <b-form-input
+                          v-model="item.planning_percent"
+                          :id="`percent_planning_${i}`"
+                          class="planning-percent-input"
+                          style="text-align: right"
+                          @blur="
+                            calculateDailyWorkload(
+                              i,
+                              item.work_percent,
+                              item.planning_percent
+                            )
+                          "
+                        ></b-form-input>
+                      </div>
+                      <div class="col-md-1">
+                        <b-form-input
+                          v-model="item.actual_planning_per_day"
+                          :id="`detail_planning_${i}`"
+                          class="planning-hour-input"
+                          style="text-align: right"
+                        ></b-form-input>
+                      </div> -->
+                      <div class="col-md-2">
+                        <b-button variant="primary" class="minus-btn mr-2" @click="removeWorkloadItem(i)">
+                          <i class="flaticon2-line p-0"></i>
+                        </b-button>
+                        <b-button variant="primary" class="plus-btn mr-2" @click="addWorkloadItem(i)">
+                          <i class="flaticon2-plus p-0"></i>
+                        </b-button>
+                        <b-button variant="primary">
+                          <i class="flaticon2-sort handle p-0"></i>
+                        </b-button>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </template>
               </draggable>
             </div>
           </b-tab>
@@ -450,6 +453,7 @@
               </div>
 
               <draggable
+                :item-key="(el) => holidayPeriods.indexOf(el)"
                 :list="holidayPeriods"
                 class="item-group"
                 ghost-class="ghost"
@@ -457,87 +461,89 @@
                 @end="draggingHoliday = false"
                 handle=".handle"
               >
-                <div v-for="(item, i) in holidayPeriods" :key="i">
-                  <div class="row mb-2">
-                    <div class="col-md-3">
-                      <b-input-group>
+                <template #item="{ element: item, index: i }">
+                  <div>
+                    <div class="row mb-2">
+                      <div class="col-md-3">
+                        <b-input-group>
+                          <b-form-input
+                            :id="`holiday_start_${i}`"
+                            :value="formatDate(item.start_date)"
+                            type="text"
+                            autocomplete="off"
+                            placeholder="dd.mm.yyyy"
+                            @blur="formatHolidayStartInvert(i)"
+                          ></b-form-input>
+                          <b-input-group-append>
+                            <b-form-datepicker
+                              v-model="item.start_date"
+                              :locale="locale"
+                              :start-weekday="1"
+                              button-only
+                              right
+                            ></b-form-datepicker>
+                          </b-input-group-append>
+                        </b-input-group>
+                      </div>
+                      <div class="col-md-3">
+                        <b-input-group>
+                          <b-form-input
+                            :id="`holiday_end_${i}`"
+                            :value="formatDate(item.end_date)"
+                            type="text"
+                            autocomplete="off"
+                            placeholder="dd.mm.yyyy"
+                            @blur="formatHolidayEndInvert(i)"
+                          ></b-form-input>
+                          <b-input-group-append>
+                            <b-form-datepicker
+                              v-model="item.end_date"
+                              :locale="locale"
+                              :start-weekday="1"
+                              button-only
+                              right
+                            ></b-form-datepicker>
+                          </b-input-group-append>
+                        </b-input-group>
+                      </div>
+                      <div class="col-md-1">
                         <b-form-input
-                          :id="`holiday_start_${i}`"
-                          :value="formatDate(item.start_date)"
-                          type="text"
-                          autocomplete="off"
-                          placeholder="dd.mm.yyyy"
-                          @blur="formatHolidayStartInvert(i)"
+                          v-model="item.amount"
+                          :id="`amount_flex_${i}`"
+                          class="flex-input"
+                          style="text-align: right"
                         ></b-form-input>
-                        <b-input-group-append>
-                          <b-form-datepicker
-                            v-model="item.start_date"
-                            :locale="locale"
-                            :start-weekday="1"
-                            button-only
-                            right
-                          ></b-form-datepicker>
-                        </b-input-group-append>
-                      </b-input-group>
-                    </div>
-                    <div class="col-md-3">
-                      <b-input-group>
+                      </div>
+                      <div class="col-md-1">
                         <b-form-input
-                          :id="`holiday_end_${i}`"
-                          :value="formatDate(item.end_date)"
-                          type="text"
-                          autocomplete="off"
-                          placeholder="dd.mm.yyyy"
-                          @blur="formatHolidayEndInvert(i)"
+                          v-model="item.actual_hours_per_day"
+                          :id="`daily_flex_${i}`"
+                          class="flex-input"
+                          style="text-align: right"
                         ></b-form-input>
-                        <b-input-group-append>
-                          <b-form-datepicker
-                            v-model="item.end_date"
-                            :locale="locale"
-                            :start-weekday="1"
-                            button-only
-                            right
-                          ></b-form-datepicker>
-                        </b-input-group-append>
-                      </b-input-group>
-                    </div>
-                    <div class="col-md-1">
-                      <b-form-input
-                        v-model="item.amount"
-                        :id="`amount_flex_${i}`"
-                        class="flex-input"
-                        style="text-align: right"
-                      ></b-form-input>
-                    </div>
-                    <div class="col-md-1">
-                      <b-form-input
-                        v-model="item.actual_hours_per_day"
-                        :id="`daily_flex_${i}`"
-                        class="flex-input"
-                        style="text-align: right"
-                      ></b-form-input>
-                    </div>
-                    <div class="col-md-2">
-                      <b-form-input
-                        v-model="item.latest"
-                        :id="`latest_flex_${i}`"
-                        class="flex-input"
-                        style="text-align: right"
-                      ></b-form-input>
-                    </div>
-                    <div class="col-md-2">
-                      <b-button variant="primary" class="minus-btn mr-2" @click="removeHolidayItem(i)">
-                        <i class="flaticon2-line p-0"></i>
-                      </b-button>
-                      <b-button variant="primary" class="plus-btn mr-2" @click="addHolidayItem(i)">
-                        <i class="flaticon2-plus p-0"></i>
-                      </b-button>
-                      <b-button variant="primary">
-                        <i class="flaticon2-sort handle p-0"></i>
-                      </b-button>
+                      </div>
+                      <div class="col-md-2">
+                        <b-form-input
+                          v-model="item.latest"
+                          :id="`latest_flex_${i}`"
+                          class="flex-input"
+                          style="text-align: right"
+                        ></b-form-input>
+                      </div>
+                      <div class="col-md-2">
+                        <b-button variant="primary" class="minus-btn mr-2" @click="removeHolidayItem(i)">
+                          <i class="flaticon2-line p-0"></i>
+                        </b-button>
+                        <b-button variant="primary" class="plus-btn mr-2" @click="addHolidayItem(i)">
+                          <i class="flaticon2-plus p-0"></i>
+                        </b-button>
+                        <b-button variant="primary">
+                          <i class="flaticon2-sort handle p-0"></i>
+                        </b-button>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </template>
               </draggable>
             </div>
           </b-tab>

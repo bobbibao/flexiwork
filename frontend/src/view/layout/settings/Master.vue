@@ -128,6 +128,7 @@
         <!-- Revenue setting -->
         <div class="row mt-2">
           <draggable
+            :item-key="(el) => revenue.indexOf(el)"
             :list="revenue"
             class="item-group"
             ghost-class="ghost"
@@ -135,49 +136,49 @@
             @end="dragging = false"
             handle=".handle"
           >
-            <div
-              v-for="(item, i) in revenue"
-              :key="i"
-              class="col-md-12 p-0 mb-2"
-              style="display: flex"
-            >
-              <div class="col-md-1">
-                <b-form-input
-                  v-model="item.year"
-                  :id="`year_${i}`"
-                  class="year-input"
-                ></b-form-input>
-              </div>
-              <div class="col-md-9 month-group">
-                <div v-for="j in 12" :key="j">
+            <template #item="{ element: item, index: i }">
+              <div
+                class="col-md-12 p-0 mb-2"
+                style="display: flex"
+              >
+                <div class="col-md-1">
                   <b-form-input
-                    v-model="item.value[j - 1]"
-                    :id="`data_${i}_${j - 1}`"
-                    :placeholder="mapMonth(j - 1)"
-                    class="data-input"
+                    v-model="item.year"
+                    :id="`year_${i}`"
+                    class="year-input"
                   ></b-form-input>
                 </div>
+                <div class="col-md-9 month-group">
+                  <div v-for="j in 12" :key="j">
+                    <b-form-input
+                      v-model="item.value[j - 1]"
+                      :id="`data_${i}_${j - 1}`"
+                      :placeholder="mapMonth(j - 1)"
+                      class="data-input"
+                    ></b-form-input>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <b-button
+                    variant="primary"
+                    class="minus-btn mr-2"
+                    @click="removeRevenue(i)"
+                  >
+                    <i class="flaticon2-line p-0"></i>
+                  </b-button>
+                  <b-button
+                    variant="primary"
+                    class="plus-btn mr-2"
+                    @click="addRevenue(i)"
+                  >
+                    <i class="flaticon2-plus p-0"></i>
+                  </b-button>
+                  <b-button variant="primary">
+                    <i class="flaticon2-sort handle p-0"></i>
+                  </b-button>
+                </div>
               </div>
-              <div class="col-md-2">
-                <b-button
-                  variant="primary"
-                  class="minus-btn mr-2"
-                  @click="removeRevenue(i)"
-                >
-                  <i class="flaticon2-line p-0"></i>
-                </b-button>
-                <b-button
-                  variant="primary"
-                  class="plus-btn mr-2"
-                  @click="addRevenue(i)"
-                >
-                  <i class="flaticon2-plus p-0"></i>
-                </b-button>
-                <b-button variant="primary">
-                  <i class="flaticon2-sort handle p-0"></i>
-                </b-button>
-              </div>
-            </div>
+            </template>
           </draggable>
         </div>
       </div>

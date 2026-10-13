@@ -1,6 +1,4 @@
-import Vue from "vue";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
-import VueAxios from "vue-axios";
 import JwtService from "../common/localStorageUtils";
 
 const SERVER_API_BASE_URL = `/api`;
@@ -9,18 +7,18 @@ const SERVER_API_BASE_URL = `/api`;
  */
 const ApiService = {
   init() {
-    Vue.use(VueAxios, axios);
+    // Vue 3: axios is used directly (the Vue.axios global from vue-axios is not available)
   },
 
   /**
    * Set the default HTTP request headers
    */
   setHeader() {
-    Vue.axios.defaults.headers.common["Authorization"] = `Bearer ${JwtService.getToken()}`;
+    axios.defaults.headers.common["Authorization"] = `Bearer ${JwtService.getToken()}`;
   },
 
   query(resource: string, params: AxiosRequestConfig = {}): Promise<AxiosResponse> {
-    return Vue.axios.get(`${SERVER_API_BASE_URL}/${resource}`, { params }).catch(error => {
+    return axios.get(`${SERVER_API_BASE_URL}/${resource}`, { params }).catch(error => {
       throw new Error(`[KT] ApiService ${error}`);
     });
   },
@@ -31,7 +29,7 @@ const ApiService = {
    * @returns {Promise<AxiosResponse>}
    */
   get<T>(resource: string, config: AxiosRequestConfig = {}): Promise<AxiosResponse<T>> {
-    return Vue.axios.get(`${SERVER_API_BASE_URL}/${resource}`, config).catch(error => {
+    return axios.get(`${SERVER_API_BASE_URL}/${resource}`, config).catch(error => {
       throw new Error(`[KT] ApiService ${error}`);
     });
   },
@@ -43,7 +41,7 @@ const ApiService = {
    * @returns {Promise<AxiosResponse>}
    */
   post<T>(resource: string, params: any = {}): Promise<AxiosResponse<T>> {
-    return Vue.axios.post(`${SERVER_API_BASE_URL}/${resource}`, params);
+    return axios.post(`${SERVER_API_BASE_URL}/${resource}`, params);
   },
 
   /**
@@ -54,7 +52,7 @@ const ApiService = {
    * @returns {Promise<AxiosResponse>}
    */
   update(resource: string, slug: string, params: any = {}): Promise<AxiosResponse> {
-    return Vue.axios.put(`${SERVER_API_BASE_URL}/${resource}/${slug}`, params);
+    return axios.put(`${SERVER_API_BASE_URL}/${resource}/${slug}`, params);
   },
 
   /**
@@ -64,7 +62,7 @@ const ApiService = {
    * @returns {Promise<AxiosResponse>}
    */
   put<T>(resource: string, params: any = {}): Promise<AxiosResponse<T>> {
-    return Vue.axios.put(`${SERVER_API_BASE_URL}/${resource}`, params);
+    return axios.put(`${SERVER_API_BASE_URL}/${resource}`, params);
   },
 
   /**
@@ -73,7 +71,7 @@ const ApiService = {
    * @returns {Promise<AxiosResponse>}
    */
   delete<T>(resource: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return Vue.axios.delete(`${SERVER_API_BASE_URL}/${resource}`, config);
+    return axios.delete(`${SERVER_API_BASE_URL}/${resource}`, config);
   }
 };
 

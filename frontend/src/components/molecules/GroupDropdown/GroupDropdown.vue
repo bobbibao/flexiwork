@@ -15,8 +15,8 @@ export default GroupDropdown;
     </ButtonCustom>
     <div v-show="showDropdown" class="dropdown-container">
       <!-- Main groups (Projects) -->
-      <template v-for="group in displayOptions">
-        <div :key="randString(10) + '-' + group.label" class="dropdown-main" @click="toggleExpand(group, $event)">
+      <template :key="randString(10) + '-' + group.label" v-for="group in displayOptions">
+        <div class="dropdown-main" @click="toggleExpand(group, $event)">
           <div class="checkbox-item">
             <div class="custom-checkbox">
               <input

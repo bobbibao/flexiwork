@@ -5,9 +5,8 @@ export default ButtonSwitch;
 
 <template>
   <div class="btn-switch-panel border border-gray-200">
-    <template v-for="option in displayOptions">
+    <template :key="randString(10) + '-' + option.value" v-for="option in displayOptions">
       <button
-        v-bind:key="randString(10) + '-' + option.value"
         class="btn-switch-item"
         :class="{ active: option.selected }"
         type="button"

@@ -83,8 +83,8 @@ export default TableTasksByProject;
       </thead>
 
       <tbody>
-        <template v-for="(prod, index) in sortSubTasks.products">
-          <tr v-bind:key="'product-' + (prod.id + index)">
+        <template :key="'product-' + (prod.id + index)" v-for="(prod, index) in sortSubTasks.products">
+          <tr>
             <td class="py-4 d-flex align-items-center">
               <b-form-checkbox
                 class="visible-box"
@@ -104,10 +104,9 @@ export default TableTasksByProject;
             </td>
           </tr>
           <template v-if="!isExpandedProduct(prod.id)">
-            <template v-for="task in prod.tasks">
+            <template :key="'Task-' + (task.project_id + '-' + task.product_id + '-' + task.id)" v-for="task in prod.tasks">
               <tr
                 class="cursor-pointer"
-                :key="'Task-' + (task.project_id + '-' + task.product_id + '-' + task.id)"
                 @click="openDrawer($event, task)"
               >
                 <td class="py-6">

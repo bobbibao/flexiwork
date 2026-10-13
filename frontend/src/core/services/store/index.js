@@ -1,5 +1,4 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import { createStore } from "vuex";
 
 import auth from "./auth.module";
 import htmlClass from "./htmlclass.module";
@@ -16,9 +15,7 @@ import dashboard from "./dashboard";
 import timesheet from "./timesheet";
 import report from "./report";
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
   modules: {
     auth,
     htmlClass,

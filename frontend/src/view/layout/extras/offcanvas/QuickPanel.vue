@@ -95,11 +95,10 @@
               <div class="scroll pr-7 mr-n7" id="kt_quick_panel_logs">
                 <div class="mb-15">
                   <h5 class="font-weight-bold mb-5">System Messages</h5>
-                  <template v-for="(item, i) in list1">
+                  <template :key="i" v-for="(item, i) in list1">
                     <!--begin: Item -->
                     <div
                       class="d-flex align-items-center flex-wrap mb-5"
-                      v-bind:key="i"
                     >
                       <div class="symbol symbol-50 symbol-light mr-5">
                         <span class="symbol-label">
@@ -143,11 +142,10 @@
 
                 <div class="mb-15">
                   <h5 class="font-weight-bold mb-5">Notifications</h5>
-                  <template v-for="(item, i) in list2">
+                  <template :key="i" v-for="(item, i) in list2">
                     <!--begin: Item -->
                     <div
                       class="d-flex align-items-center rounded p-5 mb-5"
-                      v-bind:key="i"
                       v-bind:class="`bg-light-${item.type}`"
                     >
                       <span
@@ -194,9 +192,9 @@
               <div class="scroll pr-7 mr-n7" id="kt_quick_panel_notifications">
                 <!--begin::Nav-->
                 <div class="navi navi-icon-circle navi-spacer-x-0">
-                  <template v-for="(item, i) in list3">
+                  <template :key="i" v-for="(item, i) in list3">
                     <!--begin::Item-->
-                    <a href="#" class="navi-item" v-bind:key="i">
+                    <a href="#" class="navi-item">
                       <div class="navi-link rounded">
                         <div class="symbol symbol-50 mr-3">
                           <div class="symbol-label">

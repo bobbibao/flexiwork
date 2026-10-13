@@ -18,9 +18,9 @@
     <!--begin::Body-->
     <div class="card-body pt-4">
       <div class="timeline timeline-5 mt-3">
-        <template v-for="(item, i) in list">
+        <template :key="i" v-for="(item, i) in list">
           <!--begin::Item-->
-          <div class="timeline-item align-items-start" v-bind:key="i">
+          <div class="timeline-item align-items-start">
             <!--begin::Label-->
             <div
               class="
@@ -59,12 +59,11 @@
 
               <!--begin::Section-->
               <div class="d-flex align-items-start mt-n2">
-                <template v-for="(image, i) in item.images">
+                <template :key="i" v-for="(image, i) in item.images">
                   <!--begin::Symbol-->
                   <a
                     href="#"
                     class="symbol symbol-35 symbol-light-success mr-2"
-                    v-bind:key="i"
                   >
                     <span class="symbol-label">
                       <img

@@ -29,9 +29,8 @@ export default SelectInput;
 
     <div v-show="showDropdownPanel" class="c-dropdown-container">
       <div class="c-dropdown-items">
-        <template v-for="option in displayOptions">
+        <template :key="randString(10) + '-' + option.value" v-for="option in displayOptions">
           <div
-            v-bind:key="randString(10) + '-' + option.value"
             @click="changeOption(option)"
             :class="['c-dropdown-item', option.selected ? 'selected' : '']"
           >

@@ -12,9 +12,8 @@ export default TimesheetTable;
           <thead class="main-header">
             <tr class="cursor-pointer">
               <th @click="handleSort('name')">Service <SortIcon :currentOrder="order" orderField="name" /></th>
-              <template v-for="(header, index) in dateHeaders">
+              <template :key="index" v-for="(header, index) in dateHeaders">
                 <th
-                  :key="index"
                   :class="{
                     'vertical-border-start': index === 0,
                     'vertical-border-end': index === dateHeaders.length - 1,
@@ -69,16 +68,15 @@ export default TimesheetTable;
               </tr>
 
               <template v-if="isProjectExpanded(project.id)">
-                <template v-for="prod in project.products">
+                <template :key="'product-' + prod.id + '-' + project.id" v-for="prod in project.products">
                   <!-- Product List - Now editable -->
-                  <tr v-bind:key="'product-' + prod.id + '-' + project.id">
+                  <tr>
                     <td class="font-weight-bolder text-dark py-2 bg-gray-100">
                       <span class="" :title="prod.name">{{ prod.name }}</span>
                     </td>
                     <!-- Editable cells for product instead of calculated totals -->
-                    <template v-for="(header, index) in dateHeaders">
+                    <template :key="index" v-for="(header, index) in dateHeaders">
                       <td
-                        :key="index"
                         class="py-0 bg-gray-100"
                         :class="{
                           'vertical-border-start': index === 0,
@@ -164,9 +162,8 @@ export default TimesheetTable;
                   <!-- Tasks remain as they were -->
                   <template>
                     <!-- Timesheet Content -->
-                    <template v-for="task in prod.tasks">
+                    <template :key="generateRowKey(project.id, prod.id, task.id)" v-for="task in prod.tasks">
                       <tr
-                        :key="generateRowKey(project.id, prod.id, task.id)"
                         :class="{ 'has-subtasks': task.sub_tasks?.length }"
                       >
                         <td class="space-x-2 font-weight-bold text-dark py-2">
@@ -179,9 +176,8 @@ export default TimesheetTable;
                             v-b-tooltip.hover.html.top="countWordsInText(task.name || '') > 10 ? task.name : ''"
                           ></span>
                         </td>
-                        <template v-for="(header, index) in dateHeaders">
+                        <template :key="index" v-for="(header, index) in dateHeaders">
                           <td
-                            :key="index"
                             class="py-0"
                             :class="{
                               'vertical-border-start': index === 0,
@@ -252,9 +248,8 @@ export default TimesheetTable;
                           {{ subTask.name }}
                         </td>
                         <!-- Dynamic date cells for subtasks -->
-                        <template v-for="(header, index) in dateHeaders">
+                        <template :key="index" v-for="(header, index) in dateHeaders">
                           <td
-                            :key="index"
                             class="py-0 text-gray-600"
                             :class="{
                               'vertical-border-start': index === 0,
@@ -331,9 +326,8 @@ export default TimesheetTable;
               <td class="font-weight-bold bg-gray-200">
                 <SeverityBadge :title="$t(summary)" :color="getSummaryColor(summary)" :showDot="true" />
               </td>
-              <template v-for="(header, dateIndex) in dateHeaders">
+              <template :key="dateIndex" v-for="(header, dateIndex) in dateHeaders">
                 <td
-                  :key="dateIndex"
                   :class="{
                     'vertical-border-start': dateIndex === 0,
                     'vertical-border-end': dateIndex === dateHeaders.length - 1,

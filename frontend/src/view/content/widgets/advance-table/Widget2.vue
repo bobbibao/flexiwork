@@ -60,8 +60,8 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for="(item, i) in list">
-              <tr v-bind:key="i">
+            <template :key="i" v-for="(item, i) in list">
+              <tr>
                 <td class="pl-0 py-4">
                   <div class="symbol symbol-50 symbol-light mr-1">
                     <span class="symbol-label">

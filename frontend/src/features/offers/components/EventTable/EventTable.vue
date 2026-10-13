@@ -11,40 +11,43 @@ export default {
 <template>
   <div class="events-table-block">
     <draggable
+      :item-key="(el) => events.indexOf(el)"
       class="events-table w-100"
       ghost-class="ghost"
       :list="events"
       handle=".draggable-button"
       :disabled="isDisabled"
     >
-      <div v-for="(event, index) in events" :key="`event-${index}`" class="event-row d-flex flex-row col-12 gap-4">
-        <div class="col-5 px-0">
-          <b-form-input
-            placeholder="Enter label"
-            v-model="event.label"
-            size="sm"
-            @change="updateEvent(index, { label: $event })"
-            :disabled="isDisabled"
-          ></b-form-input>
+      <template #item="{ element: event, index: index }">
+        <div class="event-row d-flex flex-row col-12 gap-4">
+          <div class="col-5 px-0">
+            <b-form-input
+              placeholder="Enter label"
+              v-model="event.label"
+              size="sm"
+              @change="updateEvent(index, { label: $event })"
+              :disabled="isDisabled"
+            ></b-form-input>
+          </div>
+          <div class="col-5 px-0">
+            <b-form-input
+              placeholder="Enter value"
+              v-model="event.value"
+              size="sm"
+              @change="updateEvent(index, { value: $event })"
+              :disabled="isDisabled"
+            ></b-form-input>
+          </div>
+          <div class="actions col-2 px-0">
+            <span class="draggable-button" :class="{ disabled: isDisabled }">
+              <ChevronMove width="20" height="20" />
+            </span>
+            <span @click="!isDisabled && deleteEvent(index)" :class="{ disabled: isDisabled }">
+              <Trash2 :width="20" :height="20" />
+            </span>
+          </div>
         </div>
-        <div class="col-5 px-0">
-          <b-form-input
-            placeholder="Enter value"
-            v-model="event.value"
-            size="sm"
-            @change="updateEvent(index, { value: $event })"
-            :disabled="isDisabled"
-          ></b-form-input>
-        </div>
-        <div class="actions col-2 px-0">
-          <span class="draggable-button" :class="{ disabled: isDisabled }">
-            <ChevronMove width="20" height="20" />
-          </span>
-          <span @click="!isDisabled && deleteEvent(index)" :class="{ disabled: isDisabled }">
-            <Trash2 :width="20" :height="20" />
-          </span>
-        </div>
-      </div>
+      </template>
     </draggable>
     <div class="events-table-button" v-if="!isDisabled">
       <button type="button" variant="link" @click="addEvent()">

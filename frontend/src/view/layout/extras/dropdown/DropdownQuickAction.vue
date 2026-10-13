@@ -21,8 +21,8 @@
     <!--begin::Nav -->
     <div class="row row-paddingless">
       <!--begin:Item-->
-      <template v-for="(item, i) in list">
-        <div class="col-6" v-bind:key="i">
+      <template :key="i" v-for="(item, i) in list">
+        <div class="col-6">
           <router-link
             to="builder"
             class="

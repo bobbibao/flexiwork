@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { AgGridVue } from "ag-grid-vue";
+import { AgGridVue } from "ag-grid-vue3"; // Vue 3 build of the same grid (v27)
 import { isEqual, get } from "lodash";
 import moment from "moment";
 import { generateColumnDefs, generateRowData, generateFooterData, generateFlexData } from "./utils/generators";

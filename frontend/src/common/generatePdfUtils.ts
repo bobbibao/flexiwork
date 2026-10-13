@@ -225,3 +225,10 @@ export async function generateHTMLToPDF(
     throw new Error("Unable to generate PDF.");
   }
 }
+
+/**
+ * Legacy files import `generatePdf`, which never existed (webpack resolved it to undefined).
+ * Native ES modules (Vite) reject missing named exports, so it is declared with the same value.
+ * @deprecated not implemented; use generateHTMLToPDF.
+ */
+export const generatePdf: undefined = undefined;

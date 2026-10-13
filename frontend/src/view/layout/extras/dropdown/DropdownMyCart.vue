@@ -26,10 +26,9 @@
         style="max-height: 30vh; position: relative"
       >
         <!--begin::Item-->
-        <template v-for="(item, i) in list">
+        <template :key="i" v-for="(item, i) in list">
           <div
             class="d-flex align-items-center justify-content-between p-8"
-            v-bind:key="i"
           >
             <div class="d-flex flex-column mr-2">
               <a

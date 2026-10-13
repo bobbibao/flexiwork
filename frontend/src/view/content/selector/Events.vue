@@ -1,6 +1,7 @@
 <template>
   <div>
     <draggable
+      :item-key="(el) => currentEvents.indexOf(el)"
       :list="currentEvents"
       class="item-group"
       ghost-class="ghost"
@@ -8,36 +9,38 @@
       @end="dragging = false"
       handle=".handle"
     >
-      <div v-for="(item, i) in currentEvents" :key="i">
-        <div class="row mb-2">
-          <div class="col-md-5 term-name">
-            <b-form-input
-              :id="`name_${i}`"
-              class="term-input"
-              size="sm"
-              v-model="currentEvents[i].label"
-              :disabled="disabled"
-              @change="setEventName(i)"
-              @input="setEdited()"
-            ></b-form-input>
-          </div>
-          <div class="col-md-5">
-            <b-form-input
-              :id="`value_${i}`"
-              :value="currentEvents[i].value"
-              size="sm"
-              type="text"
-              @blur="setEventValue(i)"
-              @input="setEdited()"
-              :disabled="disabled"
-              style="text-align: right"
-            ></b-form-input>
-          </div>
-          <div class="col-md-2">
-            <i v-show="!disabled" class="flaticon2-sort handle"></i>
+      <template #item="{ element: item, index: i }">
+        <div>
+          <div class="row mb-2">
+            <div class="col-md-5 term-name">
+              <b-form-input
+                :id="`name_${i}`"
+                class="term-input"
+                size="sm"
+                v-model="currentEvents[i].label"
+                :disabled="disabled"
+                @change="setEventName(i)"
+                @input="setEdited()"
+              ></b-form-input>
+            </div>
+            <div class="col-md-5">
+              <b-form-input
+                :id="`value_${i}`"
+                :value="currentEvents[i].value"
+                size="sm"
+                type="text"
+                @blur="setEventValue(i)"
+                @input="setEdited()"
+                :disabled="disabled"
+                style="text-align: right"
+              ></b-form-input>
+            </div>
+            <div class="col-md-2">
+              <i v-show="!disabled" class="flaticon2-sort handle"></i>
+            </div>
           </div>
         </div>
-      </div>
+      </template>
     </draggable>
 
     <!-- Actions -->

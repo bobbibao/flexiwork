@@ -1,4 +1,4 @@
-const { del } = require("object-path");
+import { del } from "object-path";
 
 const DataService = {
   fillMetadata(resource) {

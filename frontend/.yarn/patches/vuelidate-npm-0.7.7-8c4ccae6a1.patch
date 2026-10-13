@@ -1,0 +1,16 @@
+diff --git a/lib/index.js b/lib/index.js
+index c0cbb23ecd8e56b73156315c49c1d5d8898573ff..63b74ca133e4dfddb483932f5d3b8599128d4820 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -613,7 +613,10 @@ var _cachedVue = null;
+ 
+ function getVue(rootVm) {
+   if (_cachedVue) return _cachedVue;
+-  var Vue = rootVm.constructor;
++  // flexiwork patch (Vue 3 + @vue/compat): vm.constructor no longer exists on component proxies;
++  // the compat global constructor still supports Vue.extend / new Vue used below.
++  var compat = require('vue');
++  var Vue = (rootVm && rootVm.constructor && rootVm.constructor.extend) ? rootVm.constructor : (compat.default || compat);
+ 
+   while (Vue.super) {
+     Vue = Vue.super;

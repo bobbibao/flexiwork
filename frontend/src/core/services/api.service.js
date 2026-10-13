@@ -1,6 +1,4 @@
-import Vue from "vue";
 import axios from "axios";
-import VueAxios from "vue-axios";
 import JwtService from "@/core/services/jwt.service";
 
 const version = `/api`;
@@ -9,18 +7,18 @@ const version = `/api`;
  */
 const ApiService = {
   init() {
-    Vue.use(VueAxios, axios);
+    // Vue 3: axios is used directly (the Vue.axios global from vue-axios is not available)
   },
 
   /**
    * Set the default HTTP request headers
    */
   setHeader() {
-    Vue.axios.defaults.headers.common["Authorization"] = `Bearer ${JwtService.getToken()}`;
+    axios.defaults.headers.common["Authorization"] = `Bearer ${JwtService.getToken()}`;
   },
 
   query(resource, params) {
-    return Vue.axios.get(`${version}/${resource}`, params).catch(error => {
+    return axios.get(`${version}/${resource}`, params).catch(error => {
       throw new Error(`[KT] ApiService ${error}`);
     });
   },
@@ -32,7 +30,7 @@ const ApiService = {
    * @returns {*}
    */
   get(resource) {
-    return Vue.axios.get(`${version}/${resource}`).catch(error => {
+    return axios.get(`${version}/${resource}`).catch(error => {
       throw new Error(`[KT] ApiService ${error}`);
     });
   },
@@ -44,7 +42,7 @@ const ApiService = {
    * @returns {*}
    */
   post(resource, params) {
-    return Vue.axios.post(`${version}/${resource}`, params);
+    return axios.post(`${version}/${resource}`, params);
   },
 
   /**
@@ -55,7 +53,7 @@ const ApiService = {
    * @returns {IDBRequest<IDBValidKey> | Promise<void>}
    */
   update(resource, slug, params) {
-    return Vue.axios.put(`${version}/${resource}/${slug}`, params);
+    return axios.put(`${version}/${resource}/${slug}`, params);
   },
 
   /**
@@ -65,7 +63,7 @@ const ApiService = {
    * @returns {IDBRequest<IDBValidKey> | Promise<void>}
    */
   put(resource, params) {
-    return Vue.axios.put(`${version}/${resource}`, params);
+    return axios.put(`${version}/${resource}`, params);
   },
 
   /**
@@ -74,7 +72,7 @@ const ApiService = {
    * @returns {*}
    */
   delete(resource) {
-    return Vue.axios.delete(`${version}/${resource}`);
+    return axios.delete(`${version}/${resource}`);
   }
 };
 

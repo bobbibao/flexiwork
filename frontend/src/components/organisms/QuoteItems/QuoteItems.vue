@@ -18,6 +18,7 @@
     <!-- Table Body -->
     <div class="table-body margin-neg-24">
       <draggable
+        :item-key="(el) => draggableList.indexOf(el)"
         :list="draggableList"
         class=""
         ghost-class="ghost"
@@ -25,209 +26,211 @@
         @end="dragging = false"
         handle=".handle"
       >
-        <div class="table-row" v-for="(item, i) in draggableList" :key="i">
-          <!-- Title Row -->
-          <template v-if="item.type === 'title'">
-            <div class="table-cell service">
-              <b-form-input
-                :id="`title_${i}`"
-                v-model="item.description"
-                placeholder="Title"
-                :disabled="disabled"
-              ></b-form-input>
-            </div>
-            <div class="table-cell unit"></div>
-            <div class="table-cell amount"></div>
-            <div class="table-cell price"></div>
-            <div class="table-cell vat"></div>
-            <div class="table-cell planning"></div>
-            <div :id="`title_cost_${i}`" class="table-cell title-cost font-weight-bolder">
-              {{ formatMoney(item.cost ?? 0) }}
-            </div>
-            <div class="table-cell actions">
-              <div class="action-buttons">
-                <i v-show="!disabled" class="handle">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M15 6.66927L10 1.66927L5 6.66927M5 13.3359L10 18.3359L15 13.3359"
-                      stroke="#475467"
-                      stroke-width="1.66667"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </i>
-                <i v-show="!disabled" class="remove-btn" @click="removeItem(i)">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M2.5 4.9974H4.16667M4.16667 4.9974H17.5M4.16667 4.9974V16.6641C4.16667 17.1061 4.34226 17.53 4.65482 17.8426C4.96738 18.1551 5.39131 18.3307 5.83333 18.3307H14.1667C14.6087 18.3307 15.0326 18.1551 15.3452 17.8426C15.6577 17.53 15.8333 17.1061 15.8333 16.6641V4.9974H4.16667ZM6.66667 4.9974V3.33073C6.66667 2.8887 6.84226 2.46478 7.15482 2.15222C7.46738 1.83966 7.89131 1.66406 8.33333 1.66406H11.6667C12.1087 1.66406 12.5326 1.83966 12.8452 2.15222C13.1577 2.46478 13.3333 2.8887 13.3333 3.33073V4.9974"
-                      stroke="#475467"
-                      stroke-width="1.66667"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </i>
+        <template #item="{ element: item, index: i }">
+          <div class="table-row">
+            <!-- Title Row -->
+            <template v-if="item.type === 'title'">
+              <div class="table-cell service">
+                <b-form-input
+                  :id="`title_${i}`"
+                  v-model="item.description"
+                  placeholder="Title"
+                  :disabled="disabled"
+                ></b-form-input>
               </div>
-            </div>
-          </template>
-
-          <!-- Individual Row -->
-          <template v-else-if="item.type === 'individual'">
-            <div class="table-cell service">
-              <div class="service-content">
-                <b-form-checkbox
-                  :id="`individual_opt_${i}`"
-                  :checked="item.optional"
-                  :disabled="disabled || item.is_nk"
-                  @change="setOptional(i)"
-                />
-                <div class="service-inputs">
-                  <b-form-input
-                    :id="`individual_name_${i}`"
-                    :value="item.name"
-                    placeholder="Product"
-                    class="mb-2"
-                    :disabled="disabled"
-                    @blur="setName(i)"
-                  ></b-form-input>
-                  <b-form-textarea
-                    :id="`individual_desc_${i}`"
-                    rows="3"
-                    v-model="item.description"
-                    placeholder="Description"
-                    :disabled="disabled"
-                    @blur="setDesc(i)"
-                  ></b-form-textarea>
+              <div class="table-cell unit"></div>
+              <div class="table-cell amount"></div>
+              <div class="table-cell price"></div>
+              <div class="table-cell vat"></div>
+              <div class="table-cell planning"></div>
+              <div :id="`title_cost_${i}`" class="table-cell title-cost font-weight-bolder">
+                {{ formatMoney(item.cost ?? 0) }}
+              </div>
+              <div class="table-cell actions">
+                <div class="action-buttons">
+                  <i v-show="!disabled" class="handle">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M15 6.66927L10 1.66927L5 6.66927M5 13.3359L10 18.3359L15 13.3359"
+                        stroke="#475467"
+                        stroke-width="1.66667"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </i>
+                  <i v-show="!disabled" class="remove-btn" @click="removeItem(i)">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M2.5 4.9974H4.16667M4.16667 4.9974H17.5M4.16667 4.9974V16.6641C4.16667 17.1061 4.34226 17.53 4.65482 17.8426C4.96738 18.1551 5.39131 18.3307 5.83333 18.3307H14.1667C14.6087 18.3307 15.0326 18.1551 15.3452 17.8426C15.6577 17.53 15.8333 17.1061 15.8333 16.6641V4.9974H4.16667ZM6.66667 4.9974V3.33073C6.66667 2.8887 6.84226 2.46478 7.15482 2.15222C7.46738 1.83966 7.89131 1.66406 8.33333 1.66406H11.6667C12.1087 1.66406 12.5326 1.83966 12.8452 2.15222C13.1577 2.46478 13.3333 2.8887 13.3333 3.33073V4.9974"
+                        stroke="#475467"
+                        stroke-width="1.66667"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </i>
                 </div>
               </div>
-            </div>
-            <div class="table-cell unit">
-              <b-form-select
-                :id="`individual_unit_${i}`"
-                :options="units"
-                :value="item.unit"
-                value-field="name"
-                text-field="description"
-                :disabled="disabled || item.is_nk"
-                @change="setUnit(i)"
-              ></b-form-select>
-            </div>
-            <div class="table-cell amount">
-              <b-form-input
-                :id="`individual_amount_${i}`"
-                :value="item.amount"
-                :disabled="disabled || item.is_nk"
-                @blur="setAmount(i)"
-              ></b-form-input>
-            </div>
-            <div class="table-cell price">
-              <b-form-input
-                :id="`individual_price_${i}`"
-                :value="formatMoney(item.price ?? 0)"
-                :disabled="disabled || item.is_nk"
-                @blur="getCost(i)"
-              ></b-form-input>
-            </div>
-            <div class="table-cell vat">
-              <b-form-select
-                :id="`individual_vat_${i}`"
-                :value="parseFloat(item.vat_rate?.toString() ?? '0')"
-                :options="vat"
-                :disabled="disabled"
-                @change="setVAT(i)"
-              ></b-form-select>
-            </div>
-            <div class="table-cell planning">
-              <div class="planning-inputs" v-if="!item.is_nk">
-                <b-form-select
-                  :id="`individual_quarter_${i}`"
-                  :value="item.quarter"
-                  :options="quarters"
-                  :disabled="disabled || isInvoice"
-                  text-field="name"
-                  value-field="value"
-                  class="mb-2"
-                  @change="setQuarter(i)"
-                ></b-form-select>
-                <b-form-select
-                  :id="`individual_year_${i}`"
-                  :value="item.year"
-                  :options="years"
-                  :disabled="disabled || isInvoice"
-                  @change="setYear(i)"
-                ></b-form-select>
-              </div>
-            </div>
-            <div :class="['table-cell', 'cost', { 'optional-cost': item.optional }]">
-              {{ item.optional === true ? `(${formatMoney(item.cost ?? 0)})` : formatMoney(item.cost ?? 0) }}
-            </div>
-            <div class="table-cell actions">
-              <div class="action-buttons" v-if="!disabled">
-                <i class="handle">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M15 6.66927L10 1.66927L5 6.66927M5 13.3359L10 18.3359L15 13.3359"
-                      stroke="#475467"
-                      stroke-width="1.66667"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </i>
-                <i class="remove-btn" @click="removeItem(i)">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M2.5 4.9974H4.16667M4.16667 4.9974H17.5M4.16667 4.9974V16.6641C4.16667 17.1061 4.34226 17.53 4.65482 17.8426C4.96738 18.1551 5.39131 18.3307 5.83333 18.3307H14.1667C14.6087 18.3307 15.0326 18.1551 15.3452 17.8426C15.6577 17.53 15.8333 17.1061 15.8333 16.6641V4.9974H4.16667ZM6.66667 4.9974V3.33073C6.66667 2.8887 6.84226 2.46478 7.15482 2.15222C7.46738 1.83966 7.89131 1.66406 8.33333 1.66406H11.6667C12.1087 1.66406 12.5326 1.83966 12.8452 2.15222C13.1577 2.46478 13.3333 2.8887 13.3333 3.33073V4.9974"
-                      stroke="#475467"
-                      stroke-width="1.66667"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </i>
-              </div>
-            </div>
-          </template>
+            </template>
 
-          <!-- Textfield Row -->
-          <template v-else>
-            <div class="table-cell service">
-              <b-form-textarea
-                :id="`textfield_${i}`"
-                v-model="item.description"
-                rows="3"
-                :disabled="disabled"
-              ></b-form-textarea>
-            </div>
-            <div class="table-cell actions">
-              <div class="action-buttons" v-if="!disabled">
-                <i class="handle">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M15 6.66927L10 1.66927L5 6.66927M5 13.3359L10 18.3359L15 13.3359"
-                      stroke="#475467"
-                      stroke-width="1.66667"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </i>
-                <i class="remove-btn" @click="removeItem(i)">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M2.5 4.9974H4.16667M4.16667 4.9974H17.5M4.16667 4.9974V16.6641C4.16667 17.1061 4.34226 17.53 4.65482 17.8426C4.96738 18.1551 5.39131 18.3307 5.83333 18.3307H14.1667C14.6087 18.3307 15.0326 18.1551 15.3452 17.8426C15.6577 17.53 15.8333 17.1061 15.8333 16.6641V4.9974H4.16667ZM6.66667 4.9974V3.33073C6.66667 2.8887 6.84226 2.46478 7.15482 2.15222C7.46738 1.83966 7.89131 1.66406 8.33333 1.66406H11.6667C12.1087 1.66406 12.5326 1.83966 12.8452 2.15222C13.1577 2.46478 13.3333 2.8887 13.3333 3.33073V4.9974"
-                      stroke="#475467"
-                      stroke-width="1.66667"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </i>
+            <!-- Individual Row -->
+            <template v-else-if="item.type === 'individual'">
+              <div class="table-cell service">
+                <div class="service-content">
+                  <b-form-checkbox
+                    :id="`individual_opt_${i}`"
+                    :checked="item.optional"
+                    :disabled="disabled || item.is_nk"
+                    @change="setOptional(i)"
+                  />
+                  <div class="service-inputs">
+                    <b-form-input
+                      :id="`individual_name_${i}`"
+                      :value="item.name"
+                      placeholder="Product"
+                      class="mb-2"
+                      :disabled="disabled"
+                      @blur="setName(i)"
+                    ></b-form-input>
+                    <b-form-textarea
+                      :id="`individual_desc_${i}`"
+                      rows="3"
+                      v-model="item.description"
+                      placeholder="Description"
+                      :disabled="disabled"
+                      @blur="setDesc(i)"
+                    ></b-form-textarea>
+                  </div>
+                </div>
               </div>
-            </div>
-          </template>
-        </div>
+              <div class="table-cell unit">
+                <b-form-select
+                  :id="`individual_unit_${i}`"
+                  :options="units"
+                  :value="item.unit"
+                  value-field="name"
+                  text-field="description"
+                  :disabled="disabled || item.is_nk"
+                  @change="setUnit(i)"
+                ></b-form-select>
+              </div>
+              <div class="table-cell amount">
+                <b-form-input
+                  :id="`individual_amount_${i}`"
+                  :value="item.amount"
+                  :disabled="disabled || item.is_nk"
+                  @blur="setAmount(i)"
+                ></b-form-input>
+              </div>
+              <div class="table-cell price">
+                <b-form-input
+                  :id="`individual_price_${i}`"
+                  :value="formatMoney(item.price ?? 0)"
+                  :disabled="disabled || item.is_nk"
+                  @blur="getCost(i)"
+                ></b-form-input>
+              </div>
+              <div class="table-cell vat">
+                <b-form-select
+                  :id="`individual_vat_${i}`"
+                  :value="parseFloat(item.vat_rate?.toString() ?? '0')"
+                  :options="vat"
+                  :disabled="disabled"
+                  @change="setVAT(i)"
+                ></b-form-select>
+              </div>
+              <div class="table-cell planning">
+                <div class="planning-inputs" v-if="!item.is_nk">
+                  <b-form-select
+                    :id="`individual_quarter_${i}`"
+                    :value="item.quarter"
+                    :options="quarters"
+                    :disabled="disabled || isInvoice"
+                    text-field="name"
+                    value-field="value"
+                    class="mb-2"
+                    @change="setQuarter(i)"
+                  ></b-form-select>
+                  <b-form-select
+                    :id="`individual_year_${i}`"
+                    :value="item.year"
+                    :options="years"
+                    :disabled="disabled || isInvoice"
+                    @change="setYear(i)"
+                  ></b-form-select>
+                </div>
+              </div>
+              <div :class="['table-cell', 'cost', { 'optional-cost': item.optional }]">
+                {{ item.optional === true ? `(${formatMoney(item.cost ?? 0)})` : formatMoney(item.cost ?? 0) }}
+              </div>
+              <div class="table-cell actions">
+                <div class="action-buttons" v-if="!disabled">
+                  <i class="handle">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M15 6.66927L10 1.66927L5 6.66927M5 13.3359L10 18.3359L15 13.3359"
+                        stroke="#475467"
+                        stroke-width="1.66667"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </i>
+                  <i class="remove-btn" @click="removeItem(i)">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M2.5 4.9974H4.16667M4.16667 4.9974H17.5M4.16667 4.9974V16.6641C4.16667 17.1061 4.34226 17.53 4.65482 17.8426C4.96738 18.1551 5.39131 18.3307 5.83333 18.3307H14.1667C14.6087 18.3307 15.0326 18.1551 15.3452 17.8426C15.6577 17.53 15.8333 17.1061 15.8333 16.6641V4.9974H4.16667ZM6.66667 4.9974V3.33073C6.66667 2.8887 6.84226 2.46478 7.15482 2.15222C7.46738 1.83966 7.89131 1.66406 8.33333 1.66406H11.6667C12.1087 1.66406 12.5326 1.83966 12.8452 2.15222C13.1577 2.46478 13.3333 2.8887 13.3333 3.33073V4.9974"
+                        stroke="#475467"
+                        stroke-width="1.66667"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </i>
+                </div>
+              </div>
+            </template>
+
+            <!-- Textfield Row -->
+            <template v-else>
+              <div class="table-cell service">
+                <b-form-textarea
+                  :id="`textfield_${i}`"
+                  v-model="item.description"
+                  rows="3"
+                  :disabled="disabled"
+                ></b-form-textarea>
+              </div>
+              <div class="table-cell actions">
+                <div class="action-buttons" v-if="!disabled">
+                  <i class="handle">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M15 6.66927L10 1.66927L5 6.66927M5 13.3359L10 18.3359L15 13.3359"
+                        stroke="#475467"
+                        stroke-width="1.66667"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </i>
+                  <i class="remove-btn" @click="removeItem(i)">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M2.5 4.9974H4.16667M4.16667 4.9974H17.5M4.16667 4.9974V16.6641C4.16667 17.1061 4.34226 17.53 4.65482 17.8426C4.96738 18.1551 5.39131 18.3307 5.83333 18.3307H14.1667C14.6087 18.3307 15.0326 18.1551 15.3452 17.8426C15.6577 17.53 15.8333 17.1061 15.8333 16.6641V4.9974H4.16667ZM6.66667 4.9974V3.33073C6.66667 2.8887 6.84226 2.46478 7.15482 2.15222C7.46738 1.83966 7.89131 1.66406 8.33333 1.66406H11.6667C12.1087 1.66406 12.5326 1.83966 12.8452 2.15222C13.1577 2.46478 13.3333 2.8887 13.3333 3.33073V4.9974"
+                        stroke="#475467"
+                        stroke-width="1.66667"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </i>
+                </div>
+              </div>
+            </template>
+          </div>
+        </template>
       </draggable>
     </div>
 

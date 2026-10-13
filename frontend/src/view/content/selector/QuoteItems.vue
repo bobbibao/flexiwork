@@ -35,6 +35,7 @@
     <div class="row">
       <div class="col-md-12">
         <draggable
+          :item-key="(el) => draggableList.indexOf(el)"
           :list="draggableList"
           class="item-group"
           ghost-class="ghost"
@@ -42,164 +43,166 @@
           @end="dragging = false"
           handle=".handle"
         >
-          <div class="row list-group-item m-0" v-for="(item, i) in draggableList" :key="i">
-            <!-- Individual -->
-            <div v-if="item.type === 'individual'" style="display: block">
-              <div class="row pl-2">
-                <div class="col-md-4 p-0">
-                  <b-form-input
-                    :id="`individual_name_${i}`"
-                    :value="item.name"
-                    size="sm"
-                    placeholder="Product"
-                    class="form-control-solid mb-2"
-                    :disabled="disabled"
-                    @blur="setName(i)"
-                  ></b-form-input>
+          <template #item="{ element: item, index: i }">
+            <div class="row list-group-item m-0">
+              <!-- Individual -->
+              <div v-if="item.type === 'individual'" style="display: block">
+                <div class="row pl-2">
+                  <div class="col-md-4 p-0">
+                    <b-form-input
+                      :id="`individual_name_${i}`"
+                      :value="item.name"
+                      size="sm"
+                      placeholder="Product"
+                      class="form-control-solid mb-2"
+                      :disabled="disabled"
+                      @blur="setName(i)"
+                    ></b-form-input>
+                  </div>
+                </div>
+                <div class="row pl-2">
+                  <div class="col-md-4 p-0">
+                    <b-form-textarea
+                      :id="`individual_desc_${i}`"
+                      rows="3"
+                      placeholder="Description"
+                      :value="item.description"
+                      :disabled="disabled"
+                      @blur="setDesc(i)"
+                    ></b-form-textarea>
+                  </div>
+                  <div class="col-md-1 center">
+                    <b-form-checkbox
+                      :id="`individual_opt_${i}`"
+                      size="lg"
+                      :checked="item.optional"
+                      :disabled="disabled || item.is_nk"
+                      @change="setOptional(i)"
+                    />
+                  </div>
+                  <div class="col-md-1 pl-0 pr-0 center">
+                    <b-form-select
+                      :id="`individual_unit_${i}`"
+                      :options="units"
+                      :value="item.unit"
+                      value-field="name"
+                      text-field="description"
+                      :disabled="disabled || item.is_nk"
+                      @change="setUnit(i)"
+                    ></b-form-select>
+                  </div>
+                  <div class="col-md-1 pr-0 center">
+                    <b-form-input
+                      :id="`individual_amount_${i}`"
+                      style="text-align: right"
+                      :value="draggableList[i].amount"
+                      :disabled="disabled || item.is_nk"
+                      @blur="setAmount(i)"
+                    ></b-form-input>
+                  </div>
+                  <div class="col-md-1 pr-0 center">
+                    <b-form-input
+                      :id="`individual_price_${i}`"
+                      :value="formatMoney(draggableList[i].price)"
+                      style="text-align: right"
+                      :disabled="disabled || item.is_nk"
+                      @blur="getCost(i)"
+                    ></b-form-input>
+                  </div>
+                  <div class="col-md-1 pr-0 center">
+                    <b-form-select
+                      :id="`individual_vat_${i}`"
+                      :value="parseFloat(item.vat_rate)"
+                      :options="vat"
+                      :disabled="disabled"
+                      @change="setVAT(i)"
+                    ></b-form-select>
+                  </div>
+                  <div class="col-md-1 pr-0">
+                    <b-form-select
+                      v-if="!item.is_nk"
+                      :id="`individual_quarter_${i}`"
+                      :value="item.quarter"
+                      :options="quarters"
+                      :disabled="disabled || isInvoice"
+                      text-field="name"
+                      value-field="value"
+                      class="mb-2"
+                      @change="setQuarter(i)"
+                    ></b-form-select>
+                    <b-form-select
+                      v-if="!item.is_nk"
+                      :id="`individual_year_${i}`"
+                      :value="item.year"
+                      :options="years"
+                      :disabled="disabled || isInvoice"
+                      @change="setYear(i)"
+                    ></b-form-select>
+                  </div>
+                  <div :id="`individual_cost_${i}`" class="col-md-1 right item-cost">
+                    {{ item.optional === true ? `(${formatMoney(item.cost)})` : formatMoney(item.cost) }}
+                  </div>
+                  <div class="col-md-1 center">
+                    <i v-show="!disabled" class="flaticon2-sort handle mr-4"></i>
+                    <i v-show="!disabled" class="flaticon2-cancel remove-btn" @click="removeItem(i)"></i>
+                  </div>
+                </div>
+                <div v-if="item.apply_discount !== undefined && isInvoice" class="row pl-2 mt-2">
+                  <div class="col-md-4 p-0">
+                    <b-form-checkbox
+                      :id="`individual_applydis_${i}`"
+                      :checked="item.apply_discount"
+                      :disabled="disabled"
+                      @change="setApplyDiscount(i)"
+                      >{{ $t("quoteItems.applyDiscount") }}</b-form-checkbox
+                    >
+                  </div>
                 </div>
               </div>
-              <div class="row pl-2">
-                <div class="col-md-4 p-0">
-                  <b-form-textarea
-                    :id="`individual_desc_${i}`"
-                    rows="3"
-                    placeholder="Description"
-                    :value="item.description"
-                    :disabled="disabled"
-                    @blur="setDesc(i)"
-                  ></b-form-textarea>
-                </div>
-                <div class="col-md-1 center">
-                  <b-form-checkbox
-                    :id="`individual_opt_${i}`"
-                    size="lg"
-                    :checked="item.optional"
-                    :disabled="disabled || item.is_nk"
-                    @change="setOptional(i)"
-                  />
-                </div>
-                <div class="col-md-1 pl-0 pr-0 center">
-                  <b-form-select
-                    :id="`individual_unit_${i}`"
-                    :options="units"
-                    :value="item.unit"
-                    value-field="name"
-                    text-field="description"
-                    :disabled="disabled || item.is_nk"
-                    @change="setUnit(i)"
-                  ></b-form-select>
-                </div>
-                <div class="col-md-1 pr-0 center">
-                  <b-form-input
-                    :id="`individual_amount_${i}`"
-                    style="text-align: right"
-                    :value="draggableList[i].amount"
-                    :disabled="disabled || item.is_nk"
-                    @blur="setAmount(i)"
-                  ></b-form-input>
-                </div>
-                <div class="col-md-1 pr-0 center">
-                  <b-form-input
-                    :id="`individual_price_${i}`"
-                    :value="formatMoney(draggableList[i].price)"
-                    style="text-align: right"
-                    :disabled="disabled || item.is_nk"
-                    @blur="getCost(i)"
-                  ></b-form-input>
-                </div>
-                <div class="col-md-1 pr-0 center">
-                  <b-form-select
-                    :id="`individual_vat_${i}`"
-                    :value="parseFloat(item.vat_rate)"
-                    :options="vat"
-                    :disabled="disabled"
-                    @change="setVAT(i)"
-                  ></b-form-select>
-                </div>
-                <div class="col-md-1 pr-0">
-                  <b-form-select
-                    v-if="!item.is_nk"
-                    :id="`individual_quarter_${i}`"
-                    :value="item.quarter"
-                    :options="quarters"
-                    :disabled="disabled || isInvoice"
-                    text-field="name"
-                    value-field="value"
-                    class="mb-2"
-                    @change="setQuarter(i)"
-                  ></b-form-select>
-                  <b-form-select
-                    v-if="!item.is_nk"
-                    :id="`individual_year_${i}`"
-                    :value="item.year"
-                    :options="years"
-                    :disabled="disabled || isInvoice"
-                    @change="setYear(i)"
-                  ></b-form-select>
-                </div>
-                <div :id="`individual_cost_${i}`" class="col-md-1 right item-cost">
-                  {{ item.optional === true ? `(${formatMoney(item.cost)})` : formatMoney(item.cost) }}
-                </div>
-                <div class="col-md-1 center">
-                  <i v-show="!disabled" class="flaticon2-sort handle mr-4"></i>
-                  <i v-show="!disabled" class="flaticon2-cancel remove-btn" @click="removeItem(i)"></i>
-                </div>
-              </div>
-              <div v-if="item.apply_discount !== undefined && isInvoice" class="row pl-2 mt-2">
-                <div class="col-md-4 p-0">
-                  <b-form-checkbox
-                    :id="`individual_applydis_${i}`"
-                    :checked="item.apply_discount"
-                    :disabled="disabled"
-                    @change="setApplyDiscount(i)"
-                    >{{ $t("quoteItems.applyDiscount") }}</b-form-checkbox
-                  >
-                </div>
-              </div>
-            </div>
 
-            <!-- Title -->
-            <div v-else-if="item.type === 'title'" style="display: block">
-              <div class="row pl-2">
-                <div class="col-md-4 p-0">
-                  <b-form-input
-                    :id="`title_${i}`"
-                    v-model="draggableList[i].description"
-                    placeholder="Title"
-                    class="form-control-solid"
-                    :disabled="disabled"
-                  ></b-form-input>
-                </div>
-                <div :id="`title_cost_${i}`" class="col-md-7 font-weight-bolder left">
-                  {{ $t("quoteItems.titleCost") }}
-                  {{ currency }} {{ formatMoney(item.cost) }}
-                </div>
-                <div class="col-md-1 center">
-                  <i v-show="!disabled" class="flaticon2-sort handle mr-4"></i>
-                  <i v-show="!disabled" class="flaticon2-cancel remove-btn" @click="removeItem(i)"></i>
+              <!-- Title -->
+              <div v-else-if="item.type === 'title'" style="display: block">
+                <div class="row pl-2">
+                  <div class="col-md-4 p-0">
+                    <b-form-input
+                      :id="`title_${i}`"
+                      v-model="draggableList[i].description"
+                      placeholder="Title"
+                      class="form-control-solid"
+                      :disabled="disabled"
+                    ></b-form-input>
+                  </div>
+                  <div :id="`title_cost_${i}`" class="col-md-7 font-weight-bolder left">
+                    {{ $t("quoteItems.titleCost") }}
+                    {{ currency }} {{ formatMoney(item.cost) }}
+                  </div>
+                  <div class="col-md-1 center">
+                    <i v-show="!disabled" class="flaticon2-sort handle mr-4"></i>
+                    <i v-show="!disabled" class="flaticon2-cancel remove-btn" @click="removeItem(i)"></i>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Textfield -->
-            <div v-else style="display: block">
-              <div class="row pl-2">
-                <div class="col-md-11 p-0">
-                  <b-form-textarea
-                    :id="`textfield_${i}`"
-                    v-model="draggableList[i].description"
-                    rows="3"
-                    :value="item.description"
-                    :disabled="disabled"
-                  ></b-form-textarea>
-                </div>
-                <div class="col-md-1 center">
-                  <i v-show="!disabled" class="flaticon2-sort handle mr-4"></i>
-                  <i v-show="!disabled" class="flaticon2-cancel remove-btn" @click="removeItem(i)"></i>
+              <!-- Textfield -->
+              <div v-else style="display: block">
+                <div class="row pl-2">
+                  <div class="col-md-11 p-0">
+                    <b-form-textarea
+                      :id="`textfield_${i}`"
+                      v-model="draggableList[i].description"
+                      rows="3"
+                      :value="item.description"
+                      :disabled="disabled"
+                    ></b-form-textarea>
+                  </div>
+                  <div class="col-md-1 center">
+                    <i v-show="!disabled" class="flaticon2-sort handle mr-4"></i>
+                    <i v-show="!disabled" class="flaticon2-cancel remove-btn" @click="removeItem(i)"></i>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </template>
         </draggable>
       </div>
     </div>

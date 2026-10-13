@@ -11,9 +11,9 @@
     <!--end::Header-->
     <!--begin::Body-->
     <div class="card-body pt-2">
-      <template v-for="(item, i) in list">
+      <template :key="i" v-for="(item, i) in list">
         <!--begin::Item-->
-        <div class="d-flex align-items-center mb-10" v-bind:key="i">
+        <div class="d-flex align-items-center mb-10">
           <!--begin::Symbol-->
           <div class="symbol symbol-40 symbol-light-primary mr-5">
             <span class="symbol-label">

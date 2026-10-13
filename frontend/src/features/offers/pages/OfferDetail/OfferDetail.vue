@@ -418,84 +418,84 @@ export default {
                     <template #body>
                       <div class="cost-generation-block d-flex flex-row flex-wrap justify-content-between w-100">
                         <div class="cost-item col-4 pb-2">
-                          <label>{{ currentOffer.cost_generate.coefficients_z1.label }}</label>
+                          <label>{{ currentOffer.cost_generate.coefficients_z1?.label }}</label>
                           <b-form-input
                             id="coefficients_z1"
-                            :value="currentOffer.cost_generate.coefficients_z1.value"
+                            :value="currentOffer.cost_generate.coefficients_z1?.value"
                             disabled
                             size="sm"
                           />
                         </div>
                         <div class="cost-item col-4">
-                          <label>{{ currentOffer.cost_generate.coefficients_z2.label }}</label>
+                          <label>{{ currentOffer.cost_generate.coefficients_z2?.label }}</label>
                           <b-form-input
                             id="coefficients_z2"
                             type="text"
-                            :value="formatMoney(currentOffer.cost_generate.coefficients_z2.value)"
+                            :value="formatMoney(currentOffer.cost_generate.coefficients_z2?.value)"
                             disabled
                             size="sm"
                           />
                         </div>
                         <div class="cost-item col-4">
-                          <label>{{ currentOffer.cost_generate.basic_factor.label }}</label>
+                          <label>{{ currentOffer.cost_generate.basic_factor?.label }}</label>
                           <b-form-input
                             id="basic_factor"
                             type="text"
-                            :value="formatMoney(currentOffer.cost_generate.basic_factor.value)"
+                            :value="formatMoney(currentOffer.cost_generate.basic_factor?.value)"
                             disabled
                             size="sm"
                           />
                         </div>
                         <div class="cost-item col-4">
-                          <label>{{ currentOffer.cost_generate.construction_cost.label }}</label>
+                          <label>{{ currentOffer.cost_generate.construction_cost?.label }}</label>
                           <b-form-input
                             id="construction_cost"
                             type="text"
-                            :value="formatMoney(currentOffer.cost_generate.construction_cost.value)"
+                            :value="formatMoney(currentOffer.cost_generate.construction_cost?.value)"
                             size="sm"
                             @change="updateCostGenerate('construction_cost', $event)"
                             :disabled="checkArchived()"
                           />
                         </div>
                         <div class="cost-item col-4">
-                          <label>{{ currentOffer.cost_generate.team_factor.label }}</label>
+                          <label>{{ currentOffer.cost_generate.team_factor?.label }}</label>
                           <b-form-input
                             id="team_factor"
                             type="text"
-                            :value="formatMoney(currentOffer.cost_generate.team_factor.value)"
+                            :value="formatMoney(currentOffer.cost_generate.team_factor?.value)"
                             size="sm"
                             @change="updateCostGenerate('team_factor', $event)"
                             :disabled="checkArchived()"
                           />
                         </div>
                         <div class="cost-item col-4">
-                          <label>{{ currentOffer.cost_generate.u_factor.label }}</label>
+                          <label>{{ currentOffer.cost_generate.u_factor?.label }}</label>
                           <b-form-input
                             id="u_factor"
                             type="text"
-                            :value="formatMoney(currentOffer.cost_generate.u_factor.value)"
+                            :value="formatMoney(currentOffer.cost_generate.u_factor?.value)"
                             size="sm"
                             @change="updateCostGenerate('u_factor', $event)"
                             :disabled="checkArchived()"
                           />
                         </div>
                         <div class="cost-item col-4">
-                          <label>{{ currentOffer.cost_generate.time.label }}</label>
+                          <label>{{ currentOffer.cost_generate.time?.label }}</label>
                           <b-form-input
                             id="time"
                             type="text"
-                            :value="formatMoney(currentOffer.cost_generate.time.value)"
+                            :value="formatMoney(currentOffer.cost_generate.time?.value)"
                             size="sm"
                             @change="updateCostGenerate('time', $event)"
                             :disabled="checkArchived()"
                           />
                         </div>
                         <div class="cost-item col-4">
-                          <label>{{ currentOffer.cost_generate.advertised.label }}</label>
+                          <label>{{ currentOffer.cost_generate.advertised?.label }}</label>
                           <b-form-input
                             id="advertised"
                             type="text"
-                            :value="formatMoney(currentOffer.cost_generate.advertised.value)"
+                            :value="formatMoney(currentOffer.cost_generate.advertised?.value)"
                             size="sm"
                             @change="updateCostGenerate('advertised', $event)"
                             :disabled="checkArchived()"
