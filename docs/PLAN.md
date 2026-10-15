@@ -180,7 +180,7 @@ Without Docker, Kafka and Elasticsearch ran from their official tarballs (Kafka 
 | PIT withholding | 10 % when one payment is ≥ 2,000,000 VND (configurable, `SN_PIT_*`) | Q6 |
 | Timers and cancellation | ARCHITECTURE §5.5 and §5.6 values | Q7 |
 | Infra | Self-hosted dev via compose; Elasticsearch 8 | Q8 |
-| Legacy security issues | Documented, not changed | Q9 |
+| Legacy security issues | Non-breaking fixes applied (P12.6); the rest is documented | Q9 |
 | Address model | Free text + `province_code` + `ward_code` + lat/lng | Q11 |
 | Version control | `git init` at the repo root before P0.2 | Q12 |
 
