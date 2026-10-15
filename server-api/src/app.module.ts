@@ -11,6 +11,7 @@ import { AuditInterceptor } from './shared/interceptors/audit.interceptor';
 import { CompressionMiddleware } from './shared/middlewares/compression.middleware';
 import { PassportModule } from '@nestjs/passport';
 import { CacheModule } from '@nestjs/cache-manager';
+import { redisCacheStore } from './shared/redis/redis-cache.store';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { UsersModule } from './modules/users/users.module';
 import { CacheService } from './shared/services/cache.service';
@@ -64,8 +65,11 @@ const ENV_FOLDER_PATH = process.env.ENV_PATH ? process.env.ENV_PATH : `${process
       envFilePath: `${ENV_FOLDER_PATH}/${process.env.NODE_ENV}.env`,
       load: [configuration],
     }),
-    CacheModule.register({
+    // CACHE_DRIVER=redis (PLAN.md P12.2) shares the cache across instances; default stays in-memory (unchanged behaviour).
+    CacheModule.registerAsync({
       isGlobal: true,
+      useFactory: (): Record<string, unknown> =>
+        process.env.CACHE_DRIVER === 'redis' && process.env.REDIS_URL ? { store: redisCacheStore(process.env.REDIS_URL) } : {},
     }),
     MulterModule.register({
       dest: path.resolve(__dirname, 'uploads'),

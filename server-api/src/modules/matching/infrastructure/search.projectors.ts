@@ -26,8 +26,12 @@ export class SearchProjectors {
 
   @ConsumeEvents({ group: 'sn-proj-es-shifts', topics: [TOPICS.SHIFT] })
   async onShift(env: EventEnvelope): Promise<void> {
+    await this.indexShift(env.stream_id);
+  }
+
+  async indexShift(shiftId: string): Promise<void> {
     if (!this.es) return;
-    const shift = await this.shifts.load(env.stream_id);
+    const shift = await this.shifts.load(shiftId);
     if (!shift) return;
     const s = shift.state;
     const es = this.es as any;
@@ -66,9 +70,26 @@ export class SearchProjectors {
     types: ['identity.worker_registered', 'identity.worker_profile_updated', 'rating.reputation_changed'],
   })
   async onWorker(env: EventEnvelope): Promise<void> {
-    if (!this.es) return;
     const userId = env.payload.user_id ?? (env.payload.subject_type === 'worker' ? env.payload.subject_id : null);
-    if (!userId) return;
+    if (userId) await this.indexWorker(Number(userId));
+  }
+
+  /** Backfill (sn:reindex-search): documents for every worker profile; needed when ES is introduced after data exists. */
+  async reindexWorkers(): Promise<number> {
+    const rows = await WorkerProfile.findAll({ attributes: ['user_id'] });
+    for (const row of rows) await this.indexWorker(row.user_id);
+    return rows.length;
+  }
+
+  /** Backfill of open shifts; closed ones are never indexed. */
+  async reindexOpenShifts(): Promise<number> {
+    const [rows] = await WorkerProfile.sequelize!.query(`SELECT id FROM shift_views WHERE status IN (:open)`, { replacements: { open: OPEN } });
+    for (const row of rows as { id: string }[]) await this.indexShift(row.id);
+    return rows.length;
+  }
+
+  async indexWorker(userId: number): Promise<void> {
+    if (!this.es) return;
     const p = await WorkerProfile.findOne({ where: { user_id: userId } });
     if (!p) return;
     const es = this.es as any;

@@ -50,10 +50,40 @@ export class FallbackCandidateSearch implements CandidateSearch {
         workedWithEmployerBefore: false,
         hasOverlappingShift: false,
       }));
-      return enrich(this.uow, shift, candidates);
+      return enrich(this.uow, shift, await this.confirmWithPostgres(candidates));
     } catch (err) {
       this.logger.warn(`CandidateSearch fallback=postgres (${err})`);
       return this.postgres.find(shift, maxRadiusKm, limit);
     }
+  }
+
+  /**
+   * ES is a derived model and may lag or hold stale documents (e.g. an index from another database). Eligibility
+   * fields come from Postgres, the source of truth; candidates without a profile there are dropped.
+   */
+  private async confirmWithPostgres(candidates: WorkerCandidate[]): Promise<WorkerCandidate[]> {
+    if (!candidates.length) return candidates;
+    const rows = await this.uow.execute(
+      `SELECT user_id, suspended, verified, reliability_score, rating_avg, skill_codes FROM worker_profiles WHERE user_id IN (:ids)`,
+      { ids: candidates.map((c) => c.workerId) },
+      null,
+      true,
+    );
+    const byId = new Map(rows.map((r: any) => [Number(r.user_id), r]));
+    const stale = candidates.length - byId.size;
+    if (stale > 0) this.logger.warn(`${stale} worker doc(s) in ES have no profile in Postgres; run sn:reindex-search`);
+    return candidates
+      .filter((c) => byId.has(c.workerId))
+      .map((c) => {
+        const r: any = byId.get(c.workerId);
+        return {
+          ...c,
+          suspended: !!r.suspended,
+          verified: !!r.verified,
+          skills: r.skill_codes ?? c.skills,
+          reliabilityScore: Number(r.reliability_score ?? c.reliabilityScore),
+          ratingAvg: r.rating_avg === null || r.rating_avg === undefined ? null : Number(r.rating_avg),
+        };
+      });
   }
 }

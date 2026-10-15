@@ -2,6 +2,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { Client } from '@elastic/elasticsearch';
 import { ES_CLIENT, indexAlias } from 'src/shared/search/search.module';
+import { UnitOfWork } from 'src/shared/event-store/unit-of-work';
 import { ShiftQueryService } from '../application/queries/shift-query.service';
 
 export interface NearbyQuery {
@@ -26,6 +27,7 @@ export class ShiftSearchService {
   constructor(
     @Inject(ES_CLIENT) private readonly es: Client | null,
     private readonly queries: ShiftQueryService,
+    private readonly uow: UnitOfWork,
   ) {}
 
   async nearby(q: NearbyQuery) {
@@ -33,7 +35,7 @@ export class ShiftSearchService {
       try {
         return await this.fromElasticsearch(q);
       } catch (err) {
-        this.logger.warn(`CandidateSearch fallback=postgres (${err})`);
+        this.logger.warn(`ShiftSearch fallback=postgres (${err})`);
       }
     }
     return this.queries.nearbyFromPostgres(q);
@@ -53,7 +55,22 @@ export class ShiftSearchService {
       query: { bool: { filter, must } },
       sort: [{ _geo_distance: { location: { lat: q.lat, lon: q.lng }, order: 'asc', unit: 'm' } } as any, { start_at: 'asc' }],
     });
-    return result.hits.hits.map((h: any) => ({ ...this.fromDoc(h._source), distance_m: Math.round(h.sort?.[0] ?? 0) }));
+    const hits = result.hits.hits.map((h: any) => ({ ...this.fromDoc(h._source), distance_m: Math.round(h.sort?.[0] ?? 0) }));
+    return this.confirmOpen(hits);
+  }
+
+  /** ES may lag or hold stale docs; only shifts that are still open in shift_views (the read model of record) are returned. */
+  private async confirmOpen<T extends { id: string }>(hits: T[]): Promise<T[]> {
+    if (!hits.length) return hits;
+    const rows = await this.uow.execute(
+      `SELECT id FROM shift_views WHERE id IN (:ids) AND status IN ('POSTED', 'MATCHED')`,
+      { ids: hits.map((h) => h.id) },
+      null,
+      true,
+    );
+    const open = new Set(rows.map((r: any) => r.id));
+    if (open.size < hits.length) this.logger.warn(`${hits.length - open.size} stale shift doc(s) in ES skipped`);
+    return hits.filter((h) => open.has(h.id));
   }
 
   private fromDoc(d: any) {

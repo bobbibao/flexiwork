@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | Implemented P0–P12 on 2026-10-10. See §Implementation status below; Kafka and Elasticsearch paths are compile-verified only |
+| Status | Implemented P0–P12 on 2026-10-10 (P12.6 skipped by decision Q9). See §Implementation status |
 | Date | 2026-10-10 |
 | Companion | [ARCHITECTURE.md](ARCHITECTURE.md) (the *what* and *why*; this file is the *how* and *in which order*) |
 | Audience | The AI agent (or engineer) implementing it, and the reviewer approving each phase |
@@ -112,15 +112,37 @@ All phases were implemented autonomously (user instruction: choose good answers 
 | Phase | State | Evidence |
 |---|---|---|
 | P0 Groundwork | Done | `docker-compose.dev.yml`, `env/sn/`, version 0.1.0, `start:sn-dev` / `migrate:sn-dev` / `seed:sn-dev` scripts |
-| P1 Platform | Done | event store + outbox/inbox + relay, memory and Kafka brokers, CQRS, Redis locks/idempotency, BullMQ timers, search module, `main.worker.ts` |
-| P2–P8 Backend contexts | Done | identity/profiles, wallet/ledger/escrow + fake gateway + reconciliation, Shift aggregate + saga + check-in chain, matching, ratings, notifications, ops/autonomy |
-| P9 Vue 3.5 + Vite (`@vue/compat`) | Done | `yarn build:vite`; E2E S0 renders 14 legacy routes (3 pre-existing legacy defects classified, see below) |
-| P10–P11 Vietnamese shell + features | Done | E2E S1–S10 (Playwright library) |
-| P12 Hardening | Done except P12.2 | P12.1 `@SnRateLimit` guard (ADR-021); P12.2 deferred (ADR-025); P12.3 `SnMetricsService` log line + `/api/sn/health/deps`; P12.4 [asyncapi.yaml](asyncapi.yaml); `sn:rebuild-projection` (replay gives an identical `shift_views`); P12.5 run below; P12.6 not done (Q9 default = no) |
+| P1 Platform | Done | Event store, outbox/inbox + relay, memory and Kafka brokers, CQRS, Redis locks/idempotency, BullMQ timers, search module, `main.worker.ts` |
+| P2–P8 Backend contexts | Done | Identity/profiles, wallet/ledger/escrow + fake gateway + reconciliation, Shift aggregate + saga + check-in chain, matching, ratings, notifications, ops/autonomy |
+| P9 Vue 3.5 + Vite (`@vue/compat`) | Done | `yarn build:vite`; E2E S0 renders 14 legacy routes |
+| P10–P11 Vietnamese shell + features | Done | E2E S1–S10 (Playwright library, ADR-023) |
+| P12.1 Rate limits | Done | `@SnRateLimit` (ADR-021); a 429 `RATE_LIMITED` with Vietnamese text was checked live |
+| P12.2 Redis cache | Done | `CACHE_DRIVER=redis` (ADR-025); legacy `CacheService` entries seen in Redis (`cache:GET_REVENUE_SQL`, 2 h TTL) |
+| P12.3 Observability | Done | `SnMetricsService` log line (outbox backlog/age, DLQ, open exceptions, `shift_views` lag) + `/api/sn/health/deps` |
+| P12.4 Contracts | Done | [asyncapi.yaml](asyncapi.yaml) (7 channels, 39 messages) |
+| P12.5 Full end-to-end | Done | Fresh database runs below, on both the in-memory bus and Kafka + Elasticsearch + a separate worker |
+| P12.6 Legacy security fixes | Not done by decision | Q9 default = no |
+| Tools | Done | `sn:rebuild-projection` (replay gives an identical `shift_views`), `sn:reindex-search` (ADR-026) |
 
-**Verification run (in-memory bus, Postgres 16, Redis 8):** ESLint clean on SN code (domain-layer import rule enforced); `yarn test:sn` 10 suites / 43 tests; backend smokes `test/sn/smoke-happy-path.js`, `smoke-no-show.js` and `smoke-ops.js`; frontend `yarn e2e:sn` (legacy smoke + S1–S10). The API ran from `dist/` with `ENV_PATH=./env/sn`, using `SN_TIMER_SPEEDUP=120` for the smokes and `10` for the E2E run (`vite preview` on :8080).
+**Verification matrix:**
 
-**Not verified at runtime:** the Kafka broker adapter, the Elasticsearch search adapter, web push delivery to a real browser push service, and FCM. No Docker was available in the implementing session, so they are only compile-verified. Run them with `docker compose -f docker-compose.dev.yml up -d`, `MESSAGE_BUS_DRIVER=kafka` and `SEARCH_DRIVER=elasticsearch`, then repeat the smokes before staging.
+| Check | In-memory bus, Postgres search | Kafka 3.9 KRaft + Elasticsearch 8.15 + `main.worker.ts` |
+|---|---|---|
+| ESLint (SN code, domain import rule), `tsc` | ✅ | n/a |
+| `yarn test:sn` (11 suites, 46 tests, incl. FCM adapter with mocked SDK) | ✅ | n/a |
+| `smoke-happy-path`, `smoke-no-show`, `smoke-ops` | ✅ fresh DB | ✅ fresh DB (`bus=kafka, groups=7`) |
+| `smoke-web-push` (real VAPID JWT + RFC 8291 payload decrypted by a local HTTPS push service) | — | ✅ |
+| `yarn e2e:sn`: legacy smoke + S1–S10, 127 checks | ✅ fresh DB | ✅ fresh DB; Socket.IO bell updated from the worker via Redis; 0 `fallback=postgres` lines; ES query counters rose |
+
+Fresh database order: `migrate:sn-dev`, boot the API once (legacy `sync()` creates the base tables), `seed:sn-dev`, `test/sn/prepare-legacy-account.js`, then start the worker. Run `sn:reindex-search` when `SEARCH_DRIVER=elasticsearch`, because seeded profiles emit no events. Timer speedups: 120 for the smokes, 10 for E2E. Run long suites under `caffeinate -i` on macOS: host sleep pauses every process, so timers look late.
+
+Without Docker, Kafka and Elasticsearch ran from their official tarballs (Kafka with the local JDK 17, Elasticsearch with security disabled for dev). The compose file remains the documented path.
+
+**Not verifiable without your accounts:** real FCM delivery (needs a Firebase project + service account in `FCM_CREDENTIALS_PATH`), delivery through browser vendors' push services, Mailgun email, and an SMS/Zalo provider.
+
+**Found and fixed during verification:**
+- `env/sn/development.env` had a VAPID public key with no private key, so web push was silently off in dev. A new pair was generated, and the channel now warns when the pair is incomplete.
+- A stale Elasticsearch index (left over from another database) made matching offer shifts to workers who don't exist. ES candidates and nearby shifts are now confirmed against Postgres (`worker_profiles`, `shift_views`) and stale documents are logged. A full run with deliberately stale indexes passes. Note: Elasticsearch 8 refuses wildcard index deletes by default, so delete indexes by name.
 
 **Pre-existing legacy defects found (documented, not fixed, because the work is additive only):**
 - The revenue report SQL references `invoices.metadata`, which doesn't exist.

@@ -11,10 +11,17 @@ export class WebPushChannel implements NotificationChannel {
   readonly name = 'web_push' as const;
   private readonly logger = new Logger(WebPushChannel.name);
   private configured = false;
+  private warned = false;
 
   enabled() {
     const c = snConfig();
-    if (!c.VAPID_PUBLIC_KEY || !c.VAPID_PRIVATE_KEY) return false;
+    if (!c.VAPID_PUBLIC_KEY || !c.VAPID_PRIVATE_KEY) {
+      if (!this.warned && (c.VAPID_PUBLIC_KEY || c.VAPID_PRIVATE_KEY)) {
+        this.logger.warn('web push disabled: VAPID_PUBLIC_KEY and VAPID_PRIVATE_KEY must both be set (npx web-push generate-vapid-keys)');
+      }
+      this.warned = true;
+      return false;
+    }
     if (!this.configured) {
       webpush.setVapidDetails(c.VAPID_SUBJECT, c.VAPID_PUBLIC_KEY, c.VAPID_PRIVATE_KEY);
       this.configured = true;

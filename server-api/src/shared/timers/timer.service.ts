@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any -- untyped boundary: raw SQL rows / JSON event payloads */
 import { Injectable, Logger, OnApplicationBootstrap, OnModuleDestroy } from '@nestjs/common';
 import { DiscoveryService, MetadataScanner, Reflector } from '@nestjs/core';
 import { Queue, Worker, JobsOptions } from 'bullmq';
@@ -6,8 +5,6 @@ import { TIMER_HANDLER_METADATA } from './timer-handler.decorator';
 import { ignoreError, runsBackground, snConfig, timerSpeedup } from '../sn-runtime';
 
 const QUEUE_NAME = 'sn-timers';
-const SWEEP_EVERY_MS = 5_000;
-const SWEEP_GRACE_MS = 3_000;
 
 type TimerFn = (payload: any) => Promise<void>;
 
@@ -23,7 +20,6 @@ export class TimerService implements OnApplicationBootstrap, OnModuleDestroy {
   private queue: Queue | null = null;
   private worker: Worker | null = null;
   private readonly memoryTimers = new Map<string, NodeJS.Timeout>();
-  private sweeper: NodeJS.Timeout | null = null;
 
   constructor(
     private readonly discovery: DiscoveryService,
@@ -65,8 +61,6 @@ export class TimerService implements OnApplicationBootstrap, OnModuleDestroy {
         });
         this.worker.on('failed', (job, err) => this.logger.warn(`timer ${job?.name} ${job?.id} failed: ${err.message}`));
         this.logger.log(`timer processor started (${this.handlers.size} handlers)`);
-        this.sweeper = setInterval(() => this.promoteOverdue().catch(ignoreError), SWEEP_EVERY_MS);
-        this.sweeper.unref();
       }
     } else {
       this.logger.warn('REDIS_URL empty: timers use in-process setTimeout (not durable)');
@@ -74,7 +68,6 @@ export class TimerService implements OnApplicationBootstrap, OnModuleDestroy {
   }
 
   async onModuleDestroy(): Promise<void> {
-    if (this.sweeper) clearInterval(this.sweeper);
     for (const t of this.memoryTimers.values()) clearTimeout(t);
     await this.worker?.close().catch(ignoreError);
     await this.queue?.close().catch(ignoreError);
@@ -123,19 +116,6 @@ export class TimerService implements OnApplicationBootstrap, OnModuleDestroy {
     if (!this.queue) return this.memoryTimers.size;
     const counts = await this.queue.getJobCounts('delayed', 'waiting');
     return (counts.delayed ?? 0) + (counts.waiting ?? 0);
-  }
-
-  /**
-   * Safety net: delayed jobs whose due time passed but were not picked up (observed locally: a worker blocked on
-   * BZPOPMIN missed delayed-job wake-ups until another job was added). Promoting is idempotent; handlers re-check state.
-   */
-  private async promoteOverdue(): Promise<void> {
-    if (!this.queue) return;
-    const now = Date.now();
-    const delayed = await this.queue.getDelayed(0, 200);
-    const overdue = delayed.filter((job) => job.timestamp + (job.opts.delay ?? 0) + SWEEP_GRACE_MS < now);
-    for (const job of overdue) await job.promote().catch(ignoreError);
-    if (overdue.length) this.logger.warn(`promoted ${overdue.length} overdue timer(s): ${overdue.map((j) => j.name).join(', ')}`);
   }
 
   private async run(type: string, payload: any): Promise<void> {

@@ -39,6 +39,7 @@
     "rollback:sn-dev": "cross-env NODE_ENV=development DOTENV_CONFIG_PATH=env/sn/development.env node -r dotenv/config node_modules/sequelize-cli/lib/sequelize db:migrate:undo --env development",
     "seed:sn-dev": "cross-env NODE_ENV=development DOTENV_CONFIG_PATH=env/sn/development.env ts-node -r dotenv/config -r tsconfig-paths/register src/database/seeders/sn-dev.seeder.ts",
     "sn:rebuild-projection": "cross-env NODE_ENV=development DOTENV_CONFIG_PATH=env/sn/development.env ts-node -r dotenv/config -r tsconfig-paths/register src/shared/messaging/rebuild-projection.ts",
+    "sn:reindex-search": "cross-env NODE_ENV=development DOTENV_CONFIG_PATH=env/sn/development.env ts-node -r dotenv/config -r tsconfig-paths/register src/shared/search/reindex-search.ts",
     "test:sn": "jest --testPathPattern \"src/(shared|modules/(shift|wallet|matching|rating|notification|ops|sn-auth|worker-profile|employer-profile|shift-network))/\""
   },
   "husky": {
