@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Status | Implemented P0–P12 on 2026-10-10 (P12.6 skipped by decision Q9). See §Implementation status |
+| Status | Implemented P0–P12 on 2026-10-10. See §Implementation status |
 | Date | 2026-10-10 |
 | Companion | [ARCHITECTURE.md](ARCHITECTURE.md) (the *what* and *why*; this file is the *how* and *in which order*) |
 | Audience | The AI agent (or engineer) implementing it, and the reviewer approving each phase |
@@ -121,7 +121,7 @@ All phases were implemented autonomously (user instruction: choose good answers 
 | P12.3 Observability | Done | `SnMetricsService` log line (outbox backlog/age, DLQ, open exceptions, `shift_views` lag) + `/api/sn/health/deps` |
 | P12.4 Contracts | Done | [asyncapi.yaml](asyncapi.yaml) (7 channels, 39 messages) |
 | P12.5 Full end-to-end | Done | Fresh database runs below, on both the in-memory bus and Kafka + Elasticsearch + a separate worker |
-| P12.6 Legacy security fixes | Not done by decision | Q9 default = no |
+| P12.6 Legacy security fixes | Done (non-breaking; Q9 answered yes) | `main.ts` no longer logs `process.env` (0 lines in the startup log). `POST /api/files` needs a JWT: 401 without one, 200 with the legacy UI's token. `GET /api/uploads/*` stays public for `<img>` and is traversal-checked. The well-known JWT fallback secret is refused in staging/production and kept with a warning in development (`resolveJwtSecret`, spec + live check). `server-api/secrets/*.pem` are gitignored and unreferenced; moving the keys is left to the owner |
 | Tools | Done | `sn:rebuild-projection` (replay gives an identical `shift_views`), `sn:reindex-search` (ADR-026) |
 
 **Verification matrix:**
@@ -129,7 +129,7 @@ All phases were implemented autonomously (user instruction: choose good answers 
 | Check | In-memory bus, Postgres search | Kafka 3.9 KRaft + Elasticsearch 8.15 + `main.worker.ts` |
 |---|---|---|
 | ESLint (SN code, domain import rule), `tsc` | ✅ | n/a |
-| `yarn test:sn` (11 suites, 46 tests, incl. FCM adapter with mocked SDK) | ✅ | n/a |
+| `yarn test:sn` (12 suites, 50 tests, incl. FCM adapter with mocked SDK and the JWT secret policy) | ✅ | n/a |
 | `smoke-happy-path`, `smoke-no-show`, `smoke-ops` | ✅ fresh DB | ✅ fresh DB (`bus=kafka, groups=7`) |
 | `smoke-web-push` (real VAPID JWT + RFC 8291 payload decrypted by a local HTTPS push service) | — | ✅ |
 | `yarn e2e:sn`: legacy smoke + S1–S10, 127 checks | ✅ fresh DB | ✅ fresh DB; Socket.IO bell updated from the worker via Redis; 0 `fallback=postgres` lines; ES query counters rose |
@@ -149,7 +149,6 @@ Without Docker, Kafka and Elasticsearch ran from their official tarballs (Kafka 
 - `GET /api/invoices` returns a paginated object, but the invoices page iterates it as an array.
 - The timesheet/projects endpoint used by the timesheet page returns 404.
 - Legacy registration rolls back after commit when the mail send fails.
-- `main.ts` logs `process.env`.
 
 **Answers chosen for Appendix B:**
 - Q1: yes, one shift per worker slot.
@@ -160,7 +159,7 @@ Without Docker, Kafka and Elasticsearch ran from their official tarballs (Kafka 
 - Q6: withhold 10 % PIT on payments ≥ 2,000,000 VND (configurable). An accountant should confirm this.
 - Q7: ARCHITECTURE §5.5–5.6 values, in `SN_*` env keys.
 - Q8: self-hosted dev, ES 8.
-- Q9: no legacy fixes.
+- Q9: yes, non-breaking legacy security fixes only (P12.6).
 - Q10: register the legacy RBAC models without using them (ADR-015).
 - Q11: free text + codes + lat/lng.
 - Q12: local `git init`, done.

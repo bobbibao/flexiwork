@@ -4,6 +4,7 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import User from 'src/database/models/users.model';
 import { RoleEnum } from 'src/shared/enums';
 import { ConfigService } from '@nestjs/config';
+import { resolveJwtSecret } from 'src/shared/utils/jwt-secret';
 import { UnauthorizedError } from 'src/shared/utils';
 
 @Injectable()
@@ -17,7 +18,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {
-    this.JWT_SECRET_KEY = this.configService.get<string>('JWT_SECRET_KEY', 'jwt_secret_key');
+    this.JWT_SECRET_KEY = resolveJwtSecret(this.configService);
     this.ADMIN_TOKEN_EXPIRES_IN = this.configService.get<number>('ADMIN_TOKEN_EXPIRES_IN', 8 * 60 * 60);
     this.EMPLOYEE_TOKEN_EXPIRES_IN = this.configService.get<number>('EMPLOYEE_TOKEN_EXPIRES_IN', 12 * 60 * 60);
   }

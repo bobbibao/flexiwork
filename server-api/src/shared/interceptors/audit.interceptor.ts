@@ -3,6 +3,7 @@ import { Observable, tap } from 'rxjs';
 import { Op } from 'sequelize';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { resolveJwtSecret } from '../utils/jwt-secret';
 
 import { AuditCreateDto } from '../dto';
 import {
@@ -67,7 +68,7 @@ export class AuditInterceptor implements NestInterceptor {
   private _extractUserIdFromCode(code: string): number {
     try {
       // You'll need to inject ConfigService in the constructor
-      const secretKey = this.configService.get<string>('JWT_SECRET_KEY');
+      const secretKey = resolveJwtSecret(this.configService);
       const decoded = this.jwtService.verify(code, {
         algorithms: ['HS256'],
         secret: secretKey,

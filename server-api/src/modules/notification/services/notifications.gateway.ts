@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import type { Server, Socket } from 'socket.io';
 import User from 'src/database/models/users.model';
 import { RealtimeService } from './realtime.service';
+import { resolveJwtSecret } from 'src/shared/utils/jwt-secret';
 
 /** Socket.IO gateway, namespace /sn: rooms user:{id}. JWT from handshake auth.token or ?token=. */
 @WebSocketGateway({ namespace: '/sn', cors: { origin: true, credentials: true } })
@@ -26,7 +27,7 @@ export class NotificationsGateway implements OnGatewayConnection, OnModuleInit {
   async handleConnection(client: Socket) {
     try {
       const token = String(client.handshake.auth?.token || client.handshake.query?.token || '').replace(/^Bearer /, '');
-      const payload: any = this.jwt.verify(token, { algorithms: ['HS256'], secret: process.env.JWT_SECRET_KEY });
+      const payload: any = this.jwt.verify(token, { algorithms: ['HS256'], secret: resolveJwtSecret() });
       const user = await User.findByPk(payload.sub, { attributes: ['id', 'is_active', 'company_id', 'role'] });
       if (!user || !user.is_active) throw new Error('inactive');
       await client.join(`user:${user.id}`);

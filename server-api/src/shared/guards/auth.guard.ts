@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { resolveJwtSecret } from '../utils/jwt-secret';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
@@ -18,7 +19,7 @@ export class JWTAuthGuard extends AuthGuard('jwt') implements CanActivate {
   ) {
     super();
 
-    this.JWT_SECRET_KEY = this.configService.get<string>('JWT_SECRET_KEY', 'jwt_secret_key');
+    this.JWT_SECRET_KEY = resolveJwtSecret(this.configService);
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

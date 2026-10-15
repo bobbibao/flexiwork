@@ -12,7 +12,7 @@ export class AppController extends BaseController {
     super(new Logger(AppController.name));
   }
 
-  @PublicRoute()
+  // Authenticated since PLAN.md P12.6 (was public: anyone could upload). The legacy UI already sends its bearer token.
   @Post('files')
   @ApiOperation({ summary: 'Upload multiple files' })
   @ApiConsumes('multipart/form-data')
@@ -42,6 +42,7 @@ export class AppController extends BaseController {
   }
 
   @PublicRoute()
+  // Stays public: <img>/<a> tags load these without a token. findFile() rejects path traversal.
   @Get('uploads/*')
   @ApiOperation({
     summary: 'Get file from uploads folder',

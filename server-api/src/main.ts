@@ -17,9 +17,8 @@ async function main() {
     logger = new Logger('main');
   }
 
-  // Print env variables
+  // Print the env file in use; values are never logged (PLAN.md P12.6: the full process.env dump leaked secrets)
   logger.log(`envFilePath: ${process.env.ENV_PATH}/${process.env.NODE_ENV}.env`);
-  logger.log(`Env variables: ${JSON.stringify(process.env)}`);
 
   try {
     const app = await NestFactory.create(AppModule, {
