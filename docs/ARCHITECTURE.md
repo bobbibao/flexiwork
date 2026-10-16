@@ -56,12 +56,12 @@ The long-term goal is that **AI agents run the normal flow and humans handle onl
 
 ### 2.1 What the repository actually is
 
-The repository is **ArchApp**, a Swiss architecture-firm ERP. It contains no shift, worker, wallet, ledger, escrow, matching or geo-location code.
+The repository is **Flexiwork**, a Swiss architecture-firm ERP. It contains no shift, worker, wallet, ledger, escrow, matching or geo-location code.
 
 | Fact | Evidence |
 |---|---|
-| ✅ Backend package `archapp_api` v0.0.11, "Server API for ArchApp" | `server-api/package.json` |
-| ✅ Frontend package `archapp` v0.0.10 | `frontend/package.json` |
+| ✅ Backend package `flexiwork_api` v0.0.11, "Server API for Flexiwork" | `server-api/package.json` |
+| ✅ Frontend package `flexiwork` v0.0.10 | `frontend/package.json` |
 | ✅ Domain: offers, projects, invoices (Swiss QR bill), expenses, products/VAT, tasks, timesheets, reports, exports (docx/pdf/xlsx) | `server-api/src/modules/*`, `@bbitgmbh/bbit.swiss-qr-bill` dependency |
 | ✅ Currency enum `CHF`, `USD`; languages `de`, `en` | `server-api/src/shared/enums/currency.enum.ts`, `language.enum.ts` |
 | ✅ Root folder is not a git repository; no CI, Dockerfile or docker-compose | repo root listing |
@@ -1201,7 +1201,7 @@ With `MESSAGE_BUS_DRIVER=memory`, the worker process is optional.
 
 | ID | Decision | Status |
 |---|---|---|
-| ADR-001 | Treat legacy ArchApp as a convention reference; reuse `users`, `companies`, auth, audit, response/error helpers, mail; keep the rest running but hidden; no renames or deletions | Accepted (user) |
+| ADR-001 | Treat legacy Flexiwork as a convention reference; reuse `users`, `companies`, auth, audit, response/error helpers, mail; keep the rest running but hidden; no renames or deletions | Accepted (user) |
 | ADR-002 | Modular monolith, two process roles (`api`, `worker`) from one codebase | Accepted |
 | ADR-003 | Shift aggregate is event-sourced in Postgres `event_store` with optimistic concurrency | Accepted |
 | ADR-004 | Money is journal-sourced in an append-only double-entry ledger in integer VND; fake gateway first | Accepted (user) |

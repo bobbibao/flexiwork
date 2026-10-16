@@ -4,7 +4,7 @@ export default ProjectPage;
 </script>
 
 <template>
-  <div class="archapp-wrapper">
+  <div class="flexiwork-wrapper">
     <div class="d-flex">
       <TotalSumProject :totalSumNet="123" :totalSumGross="123" :projectStats="projectStats" />
     </div>

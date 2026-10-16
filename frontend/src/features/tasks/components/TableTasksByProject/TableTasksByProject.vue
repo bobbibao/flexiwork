@@ -27,7 +27,7 @@ export default TableTasksByProject;
 
     <table
       ref="tableTasks"
-      class="table archapp-table-project archapp-table-striped d-block overflow-auto"
+      class="table flexiwork-table-project flexiwork-table-striped d-block overflow-auto"
       :class="{ open: isExpanded }"
       :style="{ maxHeight: isExpanded ? tableHeight + 'px' : '0px' }"
     >

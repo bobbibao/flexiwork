@@ -5,8 +5,8 @@ var MockAdapter = require("axios-mock-adapter");
 // mock testing user accounts
 const users = [
   {
-    email: "admin@archapp.ch",
-    password: "archapp",
+    email: "admin@flexiwork.ch",
+    password: "flexiwork",
     token: "mgfi5juf74j"
   },
   {

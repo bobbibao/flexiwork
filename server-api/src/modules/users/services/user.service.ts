@@ -244,7 +244,7 @@ export class UsersService {
 
     // Validate inputs
     if (!acceptTerm) {
-      throw new UnauthorizedError('Please accept the terms and conditions for the use of ArchApp');
+      throw new UnauthorizedError('Please accept the terms and conditions for the use of Flexiwork');
     }
     if (architectureTemplate && (language.toLowerCase() !== Language.DE || currency.toUpperCase() !== Currency.CHF)) {
       throw new BadRequestError('Architecture template supports in DE/CHF only');

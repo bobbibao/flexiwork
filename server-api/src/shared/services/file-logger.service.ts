@@ -10,7 +10,7 @@ export class FileLogger implements LoggerService {
   private readonly LOGGING_DAYS: number;
   private readonly LOGGING_FOLDER_PATH: string;
   private readonly logger: winston.Logger;
-  private readonly logName: string = 'archapp';
+  private readonly logName: string = 'flexiwork';
 
   constructor() {
     const configValues = configuration();

@@ -1,5 +1,5 @@
 /*
- * S0 (PLAN §17.4): legacy ArchApp screens still render after the Vue 3 upgrade.
+ * S0 (PLAN §17.4): legacy Flexiwork screens still render after the Vue 3 upgrade.
  * Prerequisite: server-api `node -r dotenv/config test/sn/prepare-legacy-account.js` (legacy register + activation).
  * Errors on a page where a legacy API call failed (4xx/5xx) are reported as legacy data/backend issues,
  * not as upgrade regressions; every other error fails the check.

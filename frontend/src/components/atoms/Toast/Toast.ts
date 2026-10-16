@@ -113,7 +113,7 @@ export default defineComponent({
         id: toastId,
         headerClass: 'd-none',
         toastClass: type === 'success' ? 'toast-success' : 'toast-danger',
-        toaster: `b-toaster-top-center archapp-toast-top-center`,
+        toaster: `b-toaster-top-center flexiwork-toast-top-center`,
         autoHideDelay: 4000,
       });
     }

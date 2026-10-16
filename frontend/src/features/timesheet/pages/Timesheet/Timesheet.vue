@@ -5,7 +5,7 @@ export default TimesheetPage;
 
 <template>
   <div class="timesheet-page">
-    <div class="archapp-wrapper bg-white rounded-lg border border-secondary w-100 overflow-auto position-relative">
+    <div class="flexiwork-wrapper bg-white rounded-lg border border-secondary w-100 overflow-auto position-relative">
       <div class="py-3 px-6 mb-0 sticky bg-white top-0 z-10 top-section">
         <!-- 1st Top section -->
         <div class="d-flex justify-content-between">

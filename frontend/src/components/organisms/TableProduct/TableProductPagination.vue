@@ -70,7 +70,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="archapp-table__pagination">
+  <div class="flexiwork-table__pagination">
     <ButtonCustom
       :text="String($t('button.previous'))"
       variant="secondary-gray"

@@ -4,9 +4,9 @@ export default ProjectDetail;
 </script>
 
 <template>
-  <div class="archapp-wrapper bg-white rounded-lg border border-secondary w-100 overflow-auto position-relative">
+  <div class="flexiwork-wrapper bg-white rounded-lg border border-secondary w-100 overflow-auto position-relative">
     <div class="py-6 px-8 mb-0 sticky bg-white top-0 z-10 top-section gap-1">
-      <div class="archapp-project-detail">
+      <div class="flexiwork-project-detail">
         <div class="sticky-action-bar">
           <div class="action-bar d-flex justify-content-between">
             <div class="d-flex">

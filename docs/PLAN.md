@@ -374,7 +374,7 @@ flowchart LR
 - **Create:** `src/modules/sn-auth/` (flat convention: `controllers/sn-auth.controller.ts`, `services/sn-auth.service.ts`, `dto/*`, `sn-auth.module.ts`, `sn-auth.provider.ts`). Import ✅ `AuthModule` to reuse `AuthService.generateToken`.
 - **Endpoints** (all `@PublicRoute()` except `/me`; throttled in P12):
   - `POST /api/sn/auth/worker/register` `{ phone, password, full_name, email? }`: phone → E.164 via `libphonenumber-js` (VN); create a `users` row (`role='worker'`, `company_id=null`, `is_active=true`, `password=hashSync(...)` from ✅ `@node-rs/bcrypt`) and the `worker_profiles` row in one transaction; outbox `identity.worker_registered`.
-  - `POST /api/sn/auth/employer/register` `{ company_name, tax_code, email, password, phone, address, province_code?, ward_code? }`: create `companies` (`language='vi'`, `currency='VND'`), a `users` row (`role='admin'`, `company_id`) and `employer_profiles`; outbox `identity.employer_registered`. **Do not** call legacy `UsersService.register` (it seeds ArchApp defaults and enforces DE/CHF templates).
+  - `POST /api/sn/auth/employer/register` `{ company_name, tax_code, email, password, phone, address, province_code?, ward_code? }`: create `companies` (`language='vi'`, `currency='VND'`), a `users` row (`role='admin'`, `company_id`) and `employer_profiles`; outbox `identity.employer_registered`. **Do not** call legacy `UsersService.register` (it seeds Flexiwork defaults and enforces DE/CHF templates).
   - `POST /api/sn/auth/login` `{ identifier, password, company_id? }`: a phone resolves through `worker_profiles`; an email resolves through `users`, restricted to SN users (role worker/ops, or admin/manager with an `employer_profiles` row). Several employer accounts with the same email → return `{ error, companies }` like ✅ legacy `login`. The response shape is `{ access_token, user }`, the same as legacy.
   - `GET /api/sn/me` → `{ user, role, worker_profile? | employer_profile?, company? }`.
 - **Verify:** curl the register → login → `/api/sn/me` flow for both roles; a worker token on `GET /api/users` → 403 (P1.10).
@@ -840,7 +840,7 @@ Frontend (`frontend/.env.*`): `VUE_APP_API_URL` (existing ✅), `VITE_DEV_API_PR
 
 | ID | Risk / conflict found | Impact | Mitigation in this plan |
 |---|---|---|---|
-| R-01 | The repo is ArchApp (Swiss architecture ERP), not a shift marketplace; almost everything is new | Scope and effort | Reuse only identity/auth/audit/helpers; strict phase gates |
+| R-01 | The repo is Flexiwork (Swiss architecture ERP), not a shift marketplace; almost everything is new | Scope and effort | Reuse only identity/auth/audit/helpers; strict phase gates |
 | R-02 | `sequelize.sync()` and `deleteInvalidData()` run on **every boot** (`database.provider.ts`). Registered models get auto-created tables; orphan `user_activations` are deleted at each start | Schema drift, surprise deletes | Idempotent migrations run **before** boot; never `sync({alter/force})`; leave the legacy behaviour as is |
 | R-03 | Migrations run only from `migrations/v${version}`; bumping to 0.1.0 stops `v0.0.11` from running via `migrate:*` | Missed legacy migrations | P0.5 check: confirm `v0.0.11` is applied everywhere before bumping |
 | R-04 | Seven legacy controllers (`users`, `tasks`, `work-item`, `report`, `setting`, `company`, `export`) have no role guard; a worker (`company_id NULL`) could list all null-company users via `GET /api/users` | Data exposure for new roles | `SnLegacyIsolationInterceptor` (P1.10) |

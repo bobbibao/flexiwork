@@ -1,10 +1,9 @@
 {
-  "name": "archapp_api",
+  "name": "flexiwork_api",
   "version": "0.1.0",
-  "description": "Server API for ArchApp",
+  "description": "Server API for Flexiwork",
   "author": {
-    "name": "Consortia Group",
-    "url": "https://consortiagroup.co/"
+    "name": "Bobby",
   },
   "private": true,
   "resolutions": {

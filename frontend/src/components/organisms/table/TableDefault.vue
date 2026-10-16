@@ -80,7 +80,7 @@ export default defineComponent({
       :fields="fields"
       :selectable="selectable"
       @row-selected="onRowSelected"
-      class="archapp-table table"
+      class="flexiwork-table table"
     >
       <!-- Custom render for Status, Priority, and Assignee with avatar -->
       <template #table-busy>

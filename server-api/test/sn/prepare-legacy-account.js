@@ -1,5 +1,5 @@
 /*
- * Creates a fully initialised legacy ArchApp account through the legacy flow (POST /api/register +
+ * Creates a fully initialised legacy Flexiwork account through the legacy flow (POST /api/register +
  * activation), so the legacy smoke test (PLAN P9 / S0) runs against realistic data.
  * Dev only: reads the activation code from the database instead of the email.
  * Usage: DOTENV_CONFIG_PATH=env/sn/development.env node -r dotenv/config test/sn/prepare-legacy-account.js

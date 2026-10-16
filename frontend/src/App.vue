@@ -27,7 +27,7 @@ import ApiService from "./core/services/api.service";
 import JwtService from "./core/services/jwt.service";
 
 export default {
-  name: "ArchApp",
+  name: "Flexiwork",
   data() {
     return {
       toastShown: false, // Flag to prevent showing the toast again

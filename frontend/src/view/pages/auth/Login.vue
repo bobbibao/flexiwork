@@ -61,8 +61,8 @@
       <b-form class="form" @submit.stop.prevent="onSubmit">
         <!-- <div role="alert" class="alert alert-info">
           <div class="alert-text">
-            Use account <strong>test@archapp.ch</strong> and password
-            <strong>ArchApp@123</strong> to continue.
+            Use account <strong>test@flexiwork.ch</strong> and password
+            <strong>Flexiwork@123</strong> to continue.
           </div>
         </div> -->
 

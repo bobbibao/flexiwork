@@ -144,7 +144,7 @@ export default TableTasksByList;
       </template>
 
       <template #cell(createdBy)="data">
-        <div class="archapp-table__col-createdby">
+        <div class="flexiwork-table__col-createdby">
           <Avatar
             class-names="rounded-circle border-2 border-white"
             :file-path="data.item.createdBy.avatar_url"
@@ -162,7 +162,7 @@ export default TableTasksByList;
       </template>
 
       <template #cell(actions)="data">
-        <div class="archapp-table__col-actions">
+        <div class="flexiwork-table__col-actions">
           <ButtonCustom variant="link-gray" v-b-modal="'Delete-' + data.item.id">
             <template #start-icon>
               <TrashDetailedIcon />

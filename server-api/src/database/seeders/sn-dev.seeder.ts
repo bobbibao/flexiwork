@@ -3,7 +3,7 @@
  * Run: yarn seed:sn-dev   (refuses to run unless NODE_ENV=development)
  *
  * Creates: 1 ops user, 2 employers with work locations, 20 verified workers near them,
- * and one legacy ArchApp company + admin for the legacy smoke test (PLAN.md P9.0).
+ * and one legacy Flexiwork company + admin for the legacy smoke test (PLAN.md P9.0).
  */
 import { Client } from 'pg';
 import { hashSync } from '@node-rs/bcrypt';
@@ -165,7 +165,7 @@ async function main() {
     }
     console.log(`workers   20 (phones +84901000001 ... +84901000020)`);
 
-    // Legacy ArchApp company + admin, for the legacy UI smoke test
+    // Legacy Flexiwork company + admin, for the legacy UI smoke test
     const legacyCompany = await upsertCompany(db, 'Legacy Test AG', 'de', 'CHF');
     await upsertUser(db, { email: 'legacy@flexiwork.local', name: 'Legacy Admin', role: 'admin', companyId: legacyCompany });
 

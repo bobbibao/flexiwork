@@ -127,7 +127,7 @@ export default OffersTable;
       </template>
 
       <template #cell(actions)="data">
-        <div class="archapp-table__col-actions">
+        <div class="flexiwork-table__col-actions">
           <ButtonCustom variant="link-gray" size="icon" @click="handlePrint(data.item.id)">
             <template #start-icon>
               <PrintIcon v-b-tooltip.hover="$t('button.print')" />

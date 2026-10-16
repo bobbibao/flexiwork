@@ -1,4 +1,4 @@
-.archapp-table-project {
+.flexiwork-table-project {
   white-space: nowrap;
   margin-bottom: 0;
   opacity: 0;
@@ -37,7 +37,7 @@
   }
 }
 
-.archapp-table-striped {
+.flexiwork-table-striped {
   > tbody > tr:nth-of-type(odd) {
     > td,
     > th {
@@ -46,7 +46,7 @@
   }
 }
 
-.archapp-table {
+.flexiwork-table {
   white-space: nowrap;
   margin-bottom: 0;
   height: calc(100vh - 335px);

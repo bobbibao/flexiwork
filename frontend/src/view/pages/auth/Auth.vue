@@ -33,7 +33,7 @@
           <div
             class="flex-column-fluid d-flex flex-column justify-content-center"
           >
-            <h3 class="font-size-h1 mt-10 mb-5 text-white">ArchApp</h3>
+            <h3 class="font-size-h1 mt-10 mb-5 text-white">Flexiwork</h3>
             <p class="font-weight-lighter text-white opacity-90">
               {{ $t("login.remind") }}
               <router-link :to="{ name: 'register' }">
@@ -53,7 +53,7 @@
             "
           >
             <div class="opacity-70 font-weight-bold text-white">
-              © 2020 ArchApp.
+              © 2020 Flexiwork.
             </div>
           </div>
           <!--end: Aside footer for desktop -->

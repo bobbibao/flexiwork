@@ -1,4 +1,4 @@
-.archapp-wrapper {
+.flexiwork-wrapper {
   overflow-x: hidden !important;
   overflow-y: hidden !important;
 
@@ -33,7 +33,7 @@
 }
 
 @media (min-width: 576px) {
-  .archapp-wrapper {
+  .flexiwork-wrapper {
     div.sticky:first-child {
       & > *:first-child {
         margin-bottom: 1rem;
@@ -56,7 +56,7 @@
 }
 
 @media (min-width: 768px) {
-  .archapp-wrapper {
+  .flexiwork-wrapper {
     div.sticky:first-child {
       & > .d-flex {
         flex-direction: row;

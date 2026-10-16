@@ -7,7 +7,7 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      // Shift Network is the product entry point; the legacy ArchApp dashboard stays at /#/dashboard.
+      // Shift Network is the product entry point; the legacy Flexiwork dashboard stays at /#/dashboard.
       redirect: "/sn",
       component: () => import("@/view/layout/Layout"),
       children: [

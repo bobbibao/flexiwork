@@ -30,7 +30,7 @@ html {
   background: #555;
 }
 
-.archapp-wrapper {
+.flexiwork-wrapper {
   height: calc(100vh - 55px - 4rem);
   // min-width: 765px;
 }
@@ -42,7 +42,7 @@ html {
 }
 
 @media (min-width: 992px) {
-  .archapp-wrapper {
+  .flexiwork-wrapper {
     height: calc(100vh - 65px - 52px);
   }
 }

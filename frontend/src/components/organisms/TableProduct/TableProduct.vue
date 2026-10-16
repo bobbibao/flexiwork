@@ -18,7 +18,7 @@ export default TableProduct;
       :fields="fields"
       :selectable="selectable"
       @row-selected="onRowSelected"
-      class="archapp-table table"
+      class="flexiwork-table table"
     >
       <!-- Custom render for Status, Priority, and Assignee with avatar -->
       <template #table-busy>
@@ -49,7 +49,7 @@ export default TableProduct;
 
 <style scoped>
 .table-product {
-  .archapp-table {
+  .flexiwork-table {
     border-top: 1px;
     margin-top: 0px;
     white-space: nowrap;
@@ -57,13 +57,13 @@ export default TableProduct;
     height: calc(100vh - 412px);
     min-height: 100px;
   }
-  .archapp-table::v-deep .text-wrap {
+  .flexiwork-table::v-deep .text-wrap {
     white-space: normal !important;
     word-wrap: break-word;
     min-width: 100px;
   }
 
-  .archapp-table::v-deep td {
+  .flexiwork-table::v-deep td {
     max-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
