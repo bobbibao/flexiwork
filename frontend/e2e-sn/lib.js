@@ -14,7 +14,11 @@ fs.mkdirSync(EVIDENCE, { recursive: true });
 const VIEWPORTS = { mobile: { width: 390, height: 844 }, desktop: { width: 1440, height: 900 } };
 
 async function launch() {
-  return chromium.launch({ headless: true });
+  const chromePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+  return chromium.launch({
+    headless: true,
+    ...(fs.existsSync(chromePath) && { executablePath: chromePath })
+  });
 }
 
 /** New page with console-error capture and an optional geolocation stub. */

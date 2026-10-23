@@ -28,7 +28,7 @@ export const snRoutes = [
       // worker
       { path: "shift-board", name: "snShiftBoard", component: () => import("@/features/shift-board/pages/ShiftBoard/ShiftBoard.vue"), meta: { roles: W, title: "Ca gần bạn" } },
       { path: "offers", name: "snOffers", component: () => import("@/features/shift-board/pages/Offers/Offers.vue"), meta: { roles: W, title: "Lời mời" } },
-      { path: "shifts/:id", name: "snShiftPublic", component: () => import("@/features/shift-board/pages/ShiftPreview/ShiftPreview.vue"), meta: { roles: W, title: "Chi tiết ca" } },
+      { path: "shifts/:id", name: "snShiftPublic", component: () => import("@/features/shift-board/pages/ShiftPreview/ShiftPreview.vue"), meta: { roles: ALL, title: "Chi tiết ca" } },
       { path: "my-shifts", name: "snMyShifts", component: () => import("@/features/my-shifts/pages/MyShifts/MyShifts.vue"), meta: { roles: W, title: "Ca của tôi" } },
       { path: "my-shifts/:id", name: "snMyShiftDetail", component: () => import("@/features/my-shifts/pages/MyShiftDetail/MyShiftDetail.vue"), meta: { roles: W, title: "Ca của tôi" } },
       { path: "profile", name: "snWorkerProfile", component: () => import("@/features/worker-profile/pages/WorkerProfile/WorkerProfile.vue"), meta: { roles: W, title: "Hồ sơ" } },

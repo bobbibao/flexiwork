@@ -44,7 +44,8 @@ export default SnEmployerRegisterPage;
       {{ busy ? $t("sn.common.loading") : $t("sn.auth.createAccount") }}
     </button>
     <div class="text-center mt-4 sn-muted">
-      {{ $t("sn.auth.haveAccount") }} <router-link to="/sn/login">{{ $t("sn.auth.loginButton") }}</router-link>
+      <div>{{ $t("sn.auth.haveAccount") }} <router-link to="/sn/login" class="font-weight-bold">{{ $t("sn.auth.loginButton") }}</router-link></div>
+      <div class="mt-2"><router-link to="/sn/register/worker" class="text-primary font-weight-bold"><i class="la la-user mr-1"></i>{{ $t("sn.auth.registerWorker") }}</router-link></div>
     </div>
   </form>
 </template>

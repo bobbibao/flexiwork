@@ -7,7 +7,7 @@ import { notFound } from 'src/shared/utils/coded.error';
 import { GeoPoint } from 'src/shared/domain/geo-point';
 import { ShiftRepository } from '../shift.repository';
 import { availableCommands } from '../../domain/shift-state-machine';
-import { ShiftStatus } from '../../domain/shift-status.enum';
+import { ShiftStatus, OPEN_STATUSES } from '../../domain/shift-status.enum';
 import { EMPLOYER_STATUS_GROUPS, WORKER_SCOPES } from '../../constants/shift-status-groups.constant';
 import { ShiftAccess } from '../commands/shift.commands';
 import { WORK_LOCATION_READER, WorkLocationReader } from '../ports/shift.ports';
@@ -163,7 +163,7 @@ export class ShiftQueryService {
     if (access.kind === 'ops' || access.kind === 'system') return true;
     if (access.kind === 'employer') return s.companyId === access.companyId;
     // workers: assigned, offered, or any open shift (public listing)
-    return s.workerId === access.userId || s.offeredWorkerIds.includes(access.userId!) || s.status === ShiftStatus.POSTED;
+    return s.workerId === access.userId || s.offeredWorkerIds.includes(access.userId!) || (s.status !== null && OPEN_STATUSES.includes(s.status));
   }
 
   /** Hide commands the caller cannot actually use (e.g. AcceptShift when not offered). */

@@ -23,11 +23,17 @@ export default SnLoginPage;
     <button type="submit" class="btn btn-primary btn-lg btn-block" :disabled="busy || !form.identifier || !form.password" data-test="sn-login-submit">
       {{ busy ? $t("sn.common.loading") : $t("sn.auth.loginButton") }}
     </button>
-    <div class="text-center mt-6 sn-muted">
-      {{ $t("sn.auth.noAccount") }}
-      <div class="mt-2 d-flex flex-column">
-        <router-link to="/sn/register/worker" data-test="link-register-worker">{{ $t("sn.auth.registerWorker") }}</router-link>
-        <router-link to="/sn/register/employer" data-test="link-register-employer">{{ $t("sn.auth.registerEmployer") }}</router-link>
+    <div class="mt-6 pt-5 border-top">
+      <div class="text-center font-weight-bold mb-3 text-dark-50">
+        {{ $t("sn.auth.noAccount") }}
+      </div>
+      <div class="d-flex flex-column" style="gap: 10px;">
+        <router-link to="/sn/register/worker" class="btn btn-outline-primary btn-block text-center font-weight-bold py-3" data-test="link-register-worker">
+          <i class="la la-user mr-1"></i> {{ $t("sn.auth.registerWorker") }}
+        </router-link>
+        <router-link to="/sn/register/employer" class="btn btn-outline-secondary btn-block text-center font-weight-bold py-3" data-test="link-register-employer">
+          <i class="la la-building mr-1"></i> {{ $t("sn.auth.registerEmployer") }}
+        </router-link>
       </div>
     </div>
   </form>

@@ -16,9 +16,9 @@
     "start-dev": "cross-env NODE_ENV=development vue-cli-service serve --watch",
     "start-staging": "nginx -g 'daemon off;'",
     "postbuild": "shx cp package.json yarn.lock dist/ && cd dist && yarn workspaces focus --production && yarn install --immutable",
-    "dev:vite": "vite",
-    "build:vite": "vite build",
-    "preview:vite": "vite preview --port 8080",
+    "dev:vite": "./node_modules/.bin/vite",
+    "build:vite": "./node_modules/.bin/vite build",
+    "preview:vite": "./node_modules/.bin/vite preview --port 8080",
     "e2e:sn": "node e2e-sn/run.js"
   },
   "dependencies": {

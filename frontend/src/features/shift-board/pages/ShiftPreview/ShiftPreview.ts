@@ -5,6 +5,7 @@ import { SnShift } from "@/common/models/snShift.model";
 import { errorText } from "@/features/sn-shell/i18n";
 import { formatShiftRange, formatVnd, minutesToHoursLabel } from "@/common/vnFormat";
 import { skillNames } from "@/features/worker-profile/services";
+import { useSessionStore } from "@/core/stores/session.store";
 import SnAlert from "@/features/sn-shell/components/SnAlert/SnAlert.vue";
 import SnStatusBadge from "@/features/sn-shell/components/SnStatusBadge/SnStatusBadge.vue";
 
@@ -15,6 +16,7 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const session = useSessionStore();
     const id = route.params.id as string;
     const shift = ref<SnShift | null>(null);
     const skills = ref<Record<string, string>>({});
@@ -22,8 +24,14 @@ export default defineComponent({
     const busy = ref(false);
     const load = async () => {
       try {
+        if (session.role === "employer") {
+          router.replace(`/sn/employer/shifts/${id}`);
+          return;
+        }
         shift.value = await shiftBoardService.get(id);
-        if (shift.value.worker_id) router.replace(`/sn/my-shifts/${id}`);
+        if (shift.value.worker_id && session.user && Number(shift.value.worker_id) === Number(session.user.id)) {
+          router.replace(`/sn/my-shifts/${id}`);
+        }
       } catch (e) {
         error.value = errorText(e);
       }

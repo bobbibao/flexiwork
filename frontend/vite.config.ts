@@ -54,7 +54,14 @@ export default defineConfig(({ mode }) => {
         "/socket.io": { target: apiProxy, ws: true, changeOrigin: true }
       }
     },
-    preview: { port: 8080 },
+    preview: {
+      port: 8080,
+      strictPort: true,
+      proxy: {
+        "/api": { target: apiProxy, changeOrigin: true },
+        "/socket.io": { target: apiProxy, ws: true, changeOrigin: true }
+      }
+    },
     build: { outDir: "dist", sourcemap: false, chunkSizeWarningLimit: 4000 }
   };
 });
