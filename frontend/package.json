@@ -8,18 +8,11 @@
   },
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --openssl-legacy-provider",
-    "build-dev": "cross-env NODE_ENV=development vue-cli-service build",
-    "build-staging": "cross-env NODE_ENV=staging vue-cli-service build",
+    "serve": "./node_modules/.bin/vite",
+    "build": "./node_modules/.bin/vite build",
+    "preview": "./node_modules/.bin/vite preview --port 8080",
     "lint": "vue-cli-service lint",
-    "rtl": "webpack --config webpack-rtl.config.js",
-    "start-dev": "cross-env NODE_ENV=development vue-cli-service serve --watch",
-    "start-staging": "nginx -g 'daemon off;'",
-    "postbuild": "shx cp package.json yarn.lock dist/ && cd dist && yarn workspaces focus --production && yarn install --immutable",
-    "dev:vite": "./node_modules/.bin/vite",
-    "build:vite": "./node_modules/.bin/vite build",
-    "preview:vite": "./node_modules/.bin/vite preview --port 8080",
-    "e2e:sn": "node e2e-sn/run.js"
+    "test:e2e": "node e2e-sn/run.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",

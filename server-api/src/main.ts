@@ -32,10 +32,10 @@ async function main() {
 
     // Config Swagger
     const swaggerConfig = new DocumentBuilder()
-      .setTitle('Arch App')
-      .setDescription('Arch API Documentation')
+      .setTitle('Flexiwork')
+      .setDescription('Flexiwork API Documentation')
       .addBearerAuth()
-      .setVersion('1.1')
+      .setVersion('1.0')
       .build();
     const document = SwaggerModule.createDocument(app, swaggerConfig);
     SwaggerModule.setup('docs', app, document);

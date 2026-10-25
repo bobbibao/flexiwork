@@ -42,6 +42,7 @@ output.txt
 
 # Env files
 *.env
+!example.env
 !.example.env
 
 # Logs folder

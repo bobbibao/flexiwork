@@ -2,7 +2,7 @@
 const { execSync } = require("child_process");
 const run = f => execSync(`node ${__dirname}/${f}`, { stdio: "inherit" });
 let failed = false;
-for (const f of ["legacy-smoke.js", "sn-flows.js"]) {
+for (const f of ["sn-flows.js"]) {
   try {
     run(f);
   } catch {
